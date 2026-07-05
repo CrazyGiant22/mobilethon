@@ -1,3 +1,5 @@
+export type AppView = 'builder' | 'compare'
+
 export type ComponentCategory =
   | 'cpu'
   | 'gpu'

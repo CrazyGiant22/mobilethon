@@ -7,6 +7,12 @@ interface PresetBuildsProps {
 
 const PRESETS = [
   {
+    id: 'budget-1080p',
+    name: 'Budget 1080p',
+    description: 'Best bang-for-buck 1080p build',
+    parts: ['cpu-i5-13400f', 'mb-b760', 'ram-16-budget', 'gpu-rtx-3050', 'ssd-500gb-nvme', 'psu-550-bronze', 'cooler-peerless', 'case-montech-xr'],
+  },
+  {
     id: '1080p-gaming',
     name: '1080p Gaming',
     description: 'Solid 1080p high-refresh gaming',
@@ -39,7 +45,7 @@ export function PresetBuilds({ onLoad }: PresetBuildsProps) {
   return (
     <section id="builder" className="animate-fade-in">
       <h3 className="text-sm font-medium text-slate-400 uppercase tracking-wider mb-3">Quick-start presets</h3>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
         {PRESETS.map((preset) => (
           <button
             key={preset.id}

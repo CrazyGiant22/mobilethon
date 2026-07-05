@@ -10,6 +10,8 @@ A data-driven web app for PC builders and hardware enthusiasts who want to optim
 - **Power estimation** — System draw calculation with PSU headroom recommendations
 - **Performance profiling** — Gaming and productivity scores with tier classification
 - **Smart recommendations** — Prioritized upgrade suggestions based on your actual build
+- **Saved builds** — Save and load up to 20 builds to browser local storage
+- **Component comparison** — Side-by-side spec, score, and value comparison for CPUs, GPUs, RAM, and more
 - **Quick-start presets** — 1080p, 1440p, and 4K enthusiast templates to explore instantly
 
 ## Getting started
