@@ -271,12 +271,30 @@ export default function Build3DScene({ build }: Build3DSceneProps) {
   return (
     <Canvas camera={{ position: [7, 3.5, 7], fov: 42 }} dpr={[1, 2]} shadows>
       <color attach="background" args={['#0a0e17']} />
-      <ambientLight intensity={0.5} />
-      <directionalLight position={[6, 8, 5]} intensity={1.2} castShadow />
-      <pointLight position={[-4, 2, 4]} intensity={40} color="#22d3ee" />
-      <pointLight position={[4, -2, -4]} intensity={20} color="#a78bfa" />
+      <fog attach="fog" args={['#0a0e17', 14, 26]} />
+
+      {/* Base fill */}
+      <ambientLight intensity={0.75} />
+      <hemisphereLight args={['#8fb7ff', '#1a1030', 0.9]} />
+
+      {/* Key + fill directional lights */}
+      <directionalLight position={[6, 9, 5]} intensity={2.2} castShadow shadow-mapSize={[1024, 1024]} />
+      <directionalLight position={[-6, 4, -4]} intensity={0.9} color="#bcd3ff" />
+
+      {/* Top spotlight highlighting the interior */}
+      <spotLight position={[0, 10, 2]} angle={0.6} penumbra={0.6} intensity={120} color="#ffffff" castShadow />
+
+      {/* Colored accent lights for depth and glow */}
+      <pointLight position={[-4, 2, 5]} intensity={70} color="#22d3ee" distance={18} />
+      <pointLight position={[5, 3, -3]} intensity={55} color="#a78bfa" distance={18} />
+      <pointLight position={[4, -2, 4]} intensity={35} color="#38bdf8" distance={16} />
+      <pointLight position={[-3, -3, -3]} intensity={25} color="#fb7185" distance={14} />
+
+      {/* Rim light from behind for edge separation */}
+      <spotLight position={[-2, 4, -8]} angle={0.8} penumbra={1} intensity={90} color="#22d3ee" />
+
       <Scene build={build} />
-      <ContactShadows position={[0, -3.6, 0]} opacity={0.5} scale={16} blur={2.5} far={5} />
+      <ContactShadows position={[0, -3.6, 0]} opacity={0.6} scale={16} blur={2.5} far={5} />
       <OrbitControls
         enablePan={false}
         minDistance={6}
