@@ -62,6 +62,46 @@ export const components: PCComponent[] = [
     tdp: 125,
     specs: { socket: 'LGA1700', cores: 24, threads: 32, boostGHz: 6.0, ddr: 'DDR5', pcie: 5 },
   },
+  {
+    id: 'cpu-ryzen-5-8600g',
+    name: 'AMD Ryzen 5 8600G',
+    category: 'cpu',
+    brand: 'AMD',
+    price: 229,
+    performanceScore: 68,
+    tdp: 65,
+    specs: { socket: 'AM5', cores: 6, threads: 12, boostGHz: 5.0, ddr: 'DDR5', pcie: 4, igpu: true },
+  },
+  {
+    id: 'cpu-ryzen-7-7700',
+    name: 'AMD Ryzen 7 7700',
+    category: 'cpu',
+    brand: 'AMD',
+    price: 299,
+    performanceScore: 80,
+    tdp: 65,
+    specs: { socket: 'AM5', cores: 8, threads: 16, boostGHz: 5.3, ddr: 'DDR5', pcie: 5 },
+  },
+  {
+    id: 'cpu-i5-13400f',
+    name: 'Intel Core i5-13400F',
+    category: 'cpu',
+    brand: 'Intel',
+    price: 189,
+    performanceScore: 70,
+    tdp: 65,
+    specs: { socket: 'LGA1700', cores: 10, threads: 16, boostGHz: 4.6, ddr: 'DDR5', pcie: 4 },
+  },
+  {
+    id: 'cpu-i3-14100',
+    name: 'Intel Core i3-14100',
+    category: 'cpu',
+    brand: 'Intel',
+    price: 129,
+    performanceScore: 48,
+    tdp: 60,
+    specs: { socket: 'LGA1700', cores: 4, threads: 8, boostGHz: 4.7, ddr: 'DDR5', pcie: 4 },
+  },
 
   // GPUs
   {
@@ -124,6 +164,56 @@ export const components: PCComponent[] = [
     powerDraw: 450,
     specs: { vram: 24, vramType: 'GDDR6X', length: 336, slots: 3.5, dlss: true },
   },
+  {
+    id: 'gpu-rtx-4060-ti',
+    name: 'NVIDIA GeForce RTX 4060 Ti',
+    category: 'gpu',
+    brand: 'NVIDIA',
+    price: 399,
+    performanceScore: 65,
+    powerDraw: 160,
+    specs: { vram: 8, vramType: 'GDDR6', length: 240, slots: 2.5, dlss: true },
+  },
+  {
+    id: 'gpu-rtx-4070-ti-super',
+    name: 'NVIDIA GeForce RTX 4070 Ti Super',
+    category: 'gpu',
+    brand: 'NVIDIA',
+    price: 799,
+    performanceScore: 88,
+    powerDraw: 285,
+    specs: { vram: 16, vramType: 'GDDR6X', length: 285, slots: 3, dlss: true },
+  },
+  {
+    id: 'gpu-rx-7700xt',
+    name: 'AMD Radeon RX 7700 XT',
+    category: 'gpu',
+    brand: 'AMD',
+    price: 419,
+    performanceScore: 72,
+    powerDraw: 245,
+    specs: { vram: 12, vramType: 'GDDR6', length: 267, slots: 2.5 },
+  },
+  {
+    id: 'gpu-rx-7900xtx',
+    name: 'AMD Radeon RX 7900 XTX',
+    category: 'gpu',
+    brand: 'AMD',
+    price: 949,
+    performanceScore: 94,
+    powerDraw: 355,
+    specs: { vram: 24, vramType: 'GDDR6', length: 287, slots: 2.5 },
+  },
+  {
+    id: 'gpu-rtx-3050',
+    name: 'NVIDIA GeForce RTX 3050',
+    category: 'gpu',
+    brand: 'NVIDIA',
+    price: 199,
+    performanceScore: 38,
+    powerDraw: 130,
+    specs: { vram: 8, vramType: 'GDDR6', length: 200, slots: 2, dlss: true },
+  },
 
   // Motherboards
   {
@@ -158,6 +248,30 @@ export const components: PCComponent[] = [
     price: 449,
     specs: { socket: 'LGA1700', chipset: 'Z790', formFactor: 'ATX', ddr: 'DDR5', maxRam: 192, m2Slots: 5, pcie: 5 },
   },
+  {
+    id: 'mb-a620',
+    name: 'ASRock A620M Pro RS',
+    category: 'motherboard',
+    brand: 'ASRock',
+    price: 109,
+    specs: { socket: 'AM5', chipset: 'A620', formFactor: 'mATX', ddr: 'DDR5', maxRam: 128, m2Slots: 2, pcie: 4 },
+  },
+  {
+    id: 'mb-b650m',
+    name: 'Gigabyte B650M DS3H',
+    category: 'motherboard',
+    brand: 'Gigabyte',
+    price: 139,
+    specs: { socket: 'AM5', chipset: 'B650', formFactor: 'mATX', ddr: 'DDR5', maxRam: 128, m2Slots: 2, pcie: 4 },
+  },
+  {
+    id: 'mb-h770',
+    name: 'MSI PRO H770-P WiFi',
+    category: 'motherboard',
+    brand: 'MSI',
+    price: 159,
+    specs: { socket: 'LGA1700', chipset: 'H770', formFactor: 'ATX', ddr: 'DDR5', maxRam: 128, m2Slots: 3, pcie: 4 },
+  },
 
   // RAM
   {
@@ -183,6 +297,22 @@ export const components: PCComponent[] = [
     brand: 'Corsair',
     price: 229,
     specs: { capacity: 64, type: 'DDR5', speed: 6400, modules: 4 },
+  },
+  {
+    id: 'ram-16-budget',
+    name: 'TeamGroup T-Force 16GB DDR5-5200',
+    category: 'ram',
+    brand: 'TeamGroup',
+    price: 42,
+    specs: { capacity: 16, type: 'DDR5', speed: 5200, modules: 2 },
+  },
+  {
+    id: 'ram-48-ddr5',
+    name: 'Kingston Fury 48GB DDR5-6000',
+    category: 'ram',
+    brand: 'Kingston',
+    price: 149,
+    specs: { capacity: 48, type: 'DDR5', speed: 6000, modules: 2 },
   },
 
   // Storage
@@ -212,6 +342,24 @@ export const components: PCComponent[] = [
     price: 299,
     performanceScore: 82,
     specs: { capacity: 4096, type: 'NVMe', readMBs: 7400, writeMBs: 7000 },
+  },
+  {
+    id: 'ssd-500gb-nvme',
+    name: 'WD Blue SN580 500GB NVMe',
+    category: 'storage',
+    brand: 'Western Digital',
+    price: 45,
+    performanceScore: 55,
+    specs: { capacity: 512, type: 'NVMe', readMBs: 4150, writeMBs: 4150 },
+  },
+  {
+    id: 'ssd-2tb-sata',
+    name: 'Samsung 870 EVO 2TB SATA',
+    category: 'storage',
+    brand: 'Samsung',
+    price: 129,
+    performanceScore: 40,
+    specs: { capacity: 2048, type: 'SATA', readMBs: 560, writeMBs: 530 },
   },
 
   // PSUs
@@ -247,6 +395,22 @@ export const components: PCComponent[] = [
     price: 229,
     specs: { wattage: 1000, efficiency: '80+ Platinum', modular: 'full' },
   },
+  {
+    id: 'psu-550-bronze',
+    name: 'EVGA 550 BQ 550W Bronze',
+    category: 'psu',
+    brand: 'EVGA',
+    price: 55,
+    specs: { wattage: 550, efficiency: '80+ Bronze', modular: 'semi' },
+  },
+  {
+    id: 'psu-1200-titanium',
+    name: 'be quiet! Dark Power Pro 12 1200W',
+    category: 'psu',
+    brand: 'be quiet!',
+    price: 299,
+    specs: { wattage: 1200, efficiency: '80+ Titanium', modular: 'full' },
+  },
 
   // Coolers
   {
@@ -281,6 +445,22 @@ export const components: PCComponent[] = [
     price: 179,
     specs: { type: 'aio', tdpRating: 350, radiator: 360, sockets: ['AM5', 'LGA1700'] },
   },
+  {
+    id: 'cooler-peerless',
+    name: 'Thermalright Peerless Assassin 120',
+    category: 'cooler',
+    brand: 'Thermalright',
+    price: 36,
+    specs: { type: 'air', tdpRating: 220, height: 157, sockets: ['AM5', 'LGA1700'] },
+  },
+  {
+    id: 'cooler-aio-280',
+    name: 'Corsair iCUE H115i 280mm',
+    category: 'cooler',
+    brand: 'Corsair',
+    price: 139,
+    specs: { type: 'aio', tdpRating: 320, radiator: 280, sockets: ['AM5', 'LGA1700'] },
+  },
 
   // Cases
   {
@@ -306,6 +486,30 @@ export const components: PCComponent[] = [
     brand: 'Lian Li',
     price: 169,
     specs: { formFactor: 'ATX', maxGpuLength: 420, maxCoolerHeight: 167, radiatorSupport: 360 },
+  },
+  {
+    id: 'case-phanteks-g360a',
+    name: 'Phanteks G360A',
+    category: 'case',
+    brand: 'Phanteks',
+    price: 89,
+    specs: { formFactor: 'ATX', maxGpuLength: 380, maxCoolerHeight: 163, radiatorSupport: 360 },
+  },
+  {
+    id: 'case-corsair-4000d',
+    name: 'Corsair 4000D Airflow',
+    category: 'case',
+    brand: 'Corsair',
+    price: 94,
+    specs: { formFactor: 'ATX', maxGpuLength: 360, maxCoolerHeight: 170, radiatorSupport: 360 },
+  },
+  {
+    id: 'case-montech-xr',
+    name: 'Montech AIR 903 Max',
+    category: 'case',
+    brand: 'Montech',
+    price: 69,
+    specs: { formFactor: 'ATX', maxGpuLength: 400, maxCoolerHeight: 175, radiatorSupport: 360 },
   },
 ]
 

@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from 'react'
-import type { Build, ComponentCategory } from './types'
+import type { Build, ComponentCategory, PCComponent, AppView } from './types'
 import { getComponentById } from './data/components'
 import { analyzeBuild } from './utils/analyze'
 import { Header } from './components/Header'
@@ -8,10 +8,13 @@ import { BuildPanel } from './components/BuildPanel'
 import { AnalysisPanel } from './components/AnalysisPanel'
 import { ComponentPicker } from './components/ComponentPicker'
 import { PresetBuilds } from './components/PresetBuilds'
+import { SavedBuilds } from './components/SavedBuilds'
+import { ComparePanel } from './components/ComparePanel'
 
 const EMPTY_BUILD: Build = {}
 
 export default function App() {
+  const [view, setView] = useState<AppView>('builder')
   const [build, setBuild] = useState<Build>(EMPTY_BUILD)
   const [activeCategory, setActiveCategory] = useState<ComponentCategory | null>(null)
 
@@ -33,31 +36,44 @@ export default function App() {
 
   const loadPreset = useCallback((preset: Build) => {
     setBuild(preset)
+    setView('builder')
   }, [])
 
   const clearBuild = useCallback(() => {
     setBuild(EMPTY_BUILD)
   }, [])
 
+  const useInBuild = useCallback((component: PCComponent) => {
+    setBuild((prev) => ({ ...prev, [component.category]: component }))
+    setView('builder')
+  }, [])
+
   return (
     <div className="min-h-screen grid-bg">
-      <Header />
+      <Header view={view} onViewChange={setView} />
       <main>
         <Hero completeness={analysis.completeness} totalCost={analysis.totalCost} />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-          <PresetBuilds onLoad={loadPreset} />
-          <div className="mt-8 grid grid-cols-1 xl:grid-cols-5 gap-6">
-            <div className="xl:col-span-2">
-              <BuildPanel
-                build={build}
-                onSlotClick={setActiveCategory}
-                onClear={clearBuild}
-              />
-            </div>
-            <div className="xl:col-span-3">
-              <AnalysisPanel analysis={analysis} build={build} />
-            </div>
-          </div>
+          {view === 'builder' ? (
+            <>
+              <PresetBuilds onLoad={loadPreset} />
+              <div className="mt-8 grid grid-cols-1 xl:grid-cols-5 gap-6">
+                <div className="xl:col-span-2 space-y-4">
+                  <BuildPanel
+                    build={build}
+                    onSlotClick={setActiveCategory}
+                    onClear={clearBuild}
+                  />
+                  <SavedBuilds currentBuild={build} onLoad={loadPreset} />
+                </div>
+                <div className="xl:col-span-3">
+                  <AnalysisPanel analysis={analysis} build={build} />
+                </div>
+              </div>
+            </>
+          ) : (
+            <ComparePanel onUseInBuild={useInBuild} />
+          )}
         </div>
       </main>
       {activeCategory && (
