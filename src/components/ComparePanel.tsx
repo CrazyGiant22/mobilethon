@@ -8,7 +8,7 @@ interface ComparePanelProps {
   onUseInBuild: (component: PCComponent) => void
 }
 
-const COMPARE_CATEGORIES: ComponentCategory[] = ['cpu', 'gpu', 'motherboard', 'ram', 'storage', 'psu', 'cooler']
+const COMPARE_CATEGORIES: ComponentCategory[] = ['cpu', 'gpu', 'motherboard', 'ram', 'storage', 'psu', 'cooler', 'case']
 
 function formatSpecValue(value: string | number | boolean | string[]): string {
   if (Array.isArray(value)) return value.join(', ')
@@ -146,7 +146,7 @@ export function ComparePanel({ onUseInBuild }: ComparePanelProps) {
               </div>
               {left.performanceScore && right.performanceScore && (
                 <div className="grid grid-cols-3 px-5 py-2.5 text-sm bg-surface-700/20">
-                  <span className="text-slate-400">Value (score/$)</span>
+                  <span className="text-slate-400">Value (score per $100)</span>
                   <span className={`text-center font-mono ${(left.performanceScore / left.price) > (right.performanceScore / right.price) ? 'text-accent-emerald' : 'text-slate-300'}`}>
                     {(left.performanceScore / left.price * 100).toFixed(1)}
                   </span>

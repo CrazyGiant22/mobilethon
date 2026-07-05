@@ -3,6 +3,7 @@ import { getComponentById } from '../data/components'
 
 interface PresetBuildsProps {
   onLoad: (build: Build) => void
+  hasExistingBuild?: boolean
 }
 
 const PRESETS = [
@@ -44,8 +45,9 @@ const PRESETS = [
   },
 ] as const
 
-export function PresetBuilds({ onLoad }: PresetBuildsProps) {
+export function PresetBuilds({ onLoad, hasExistingBuild }: PresetBuildsProps) {
   const loadPreset = (parts: readonly string[]) => {
+    if (hasExistingBuild && !window.confirm('Load this preset? Your current build will be replaced.')) return
     const build: Build = {}
     for (const id of parts) {
       const comp = getComponentById(id)
@@ -55,7 +57,7 @@ export function PresetBuilds({ onLoad }: PresetBuildsProps) {
   }
 
   return (
-    <section id="builder" className="animate-fade-in">
+    <section id="builder" className="animate-fade-in flex-1 min-w-0">
       <h3 className="text-sm font-medium text-slate-400 uppercase tracking-wider mb-3">Quick-start presets</h3>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3">
         {PRESETS.map((preset) => (

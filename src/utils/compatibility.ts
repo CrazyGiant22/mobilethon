@@ -48,6 +48,46 @@ export function checkCompatibility(build: Build): CompatibilityIssue[] {
         message: `Motherboard supports ${mbDdr} but selected RAM is ${ramType}.`,
         category: 'ram',
       })
+    } else {
+      const maxRam = Number(build.motherboard.specs.maxRam)
+      const capacity = Number(build.ram.specs.capacity)
+      if (capacity > maxRam) {
+        issues.push({
+          id: 'ram-capacity',
+          severity: 'error',
+          title: 'RAM exceeds board limit',
+          message: `${capacity}GB kit exceeds motherboard's ${maxRam}GB maximum.`,
+          category: 'ram',
+        })
+      }
+    }
+  }
+
+  if (build.motherboard && build.case) {
+    const boardFf = String(build.motherboard.specs.formFactor)
+    const caseFf = String(build.case.specs.formFactor)
+    const rank: Record<string, number> = { 'mini-ITX': 1, mATX: 2, ATX: 3, 'E-ATX': 4 }
+    if ((rank[boardFf] ?? 2) > (rank[caseFf] ?? 3)) {
+      issues.push({
+        id: 'form-factor',
+        severity: 'error',
+        title: 'Motherboard too large for case',
+        message: `${boardFf} board won't fit in a ${caseFf} case.`,
+        category: 'case',
+      })
+    }
+  }
+
+  if (build.cpu && !build.gpu) {
+    const hasIgpu = Boolean(build.cpu.specs.igpu)
+    if (!hasIgpu) {
+      issues.push({
+        id: 'no-gpu',
+        severity: 'warning',
+        title: 'No graphics card selected',
+        message: `${build.cpu.name} has no integrated graphics — you need a dedicated GPU for display output.`,
+        category: 'gpu',
+      })
     }
   }
 

@@ -1,9 +1,10 @@
-import type { BuildAnalysis, Build } from '../types'
+import type { BuildAnalysis, Build, ComponentCategory } from '../types'
 import { BottleneckChart } from './BottleneckChart'
 
 interface AnalysisPanelProps {
   analysis: BuildAnalysis
   build: Build
+  onFixCategory?: (category: ComponentCategory) => void
 }
 
 const TIER_COLORS = {
@@ -26,7 +27,7 @@ const PRIORITY_STYLES = {
   low: 'bg-accent-blue/10 text-accent-blue border-accent-blue/20',
 }
 
-export function AnalysisPanel({ analysis, build }: AnalysisPanelProps) {
+export function AnalysisPanel({ analysis, build, onFixCategory }: AnalysisPanelProps) {
   const { issues, bottleneck, power, performance, recommendations } = analysis
   const hasBuild = build.cpu || build.gpu
 
@@ -52,7 +53,6 @@ export function AnalysisPanel({ analysis, build }: AnalysisPanelProps) {
 
   return (
     <div id="analysis" className="space-y-4 animate-fade-in">
-      {/* Performance tier */}
       <div className="rounded-2xl bg-surface-800 border border-surface-600/50 p-5">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
@@ -69,12 +69,10 @@ export function AnalysisPanel({ analysis, build }: AnalysisPanelProps) {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Bottleneck */}
         <div className="rounded-2xl bg-surface-800 border border-surface-600/50 p-5">
           <BottleneckChart bottleneck={bottleneck} />
         </div>
 
-        {/* Power */}
         <div className="rounded-2xl bg-surface-800 border border-surface-600/50 p-5">
           <h4 className="text-sm font-medium text-slate-300 mb-4">Power Estimate</h4>
           <div className="space-y-3">
@@ -96,14 +94,13 @@ export function AnalysisPanel({ analysis, build }: AnalysisPanelProps) {
             )}
             {!power.psuAdequate && build.psu && (
               <p className="text-xs text-accent-rose mt-2">
-                PSU is undersized for this build. Upgrade to at least {power.recommendedWattage}W.
+                PSU is undersized. Upgrade to at least {power.recommendedWattage}W.
               </p>
             )}
           </div>
         </div>
       </div>
 
-      {/* Compatibility */}
       {issues.length > 0 && (
         <div className="rounded-2xl bg-surface-800 border border-surface-600/50 p-5">
           <div className="flex items-center gap-3 mb-4">
@@ -125,32 +122,53 @@ export function AnalysisPanel({ analysis, build }: AnalysisPanelProps) {
                 key={issue.id}
                 className={`px-4 py-3 rounded-xl border text-sm ${SEVERITY_STYLES[issue.severity]}`}
               >
-                <p className="font-medium">{issue.title}</p>
-                <p className="text-xs mt-1 opacity-80">{issue.message}</p>
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <p className="font-medium">{issue.title}</p>
+                    <p className="text-xs mt-1 opacity-80">{issue.message}</p>
+                  </div>
+                  {onFixCategory && issue.category !== 'general' && issue.severity !== 'success' && (
+                    <button
+                      onClick={() => onFixCategory(issue.category as ComponentCategory)}
+                      className="shrink-0 text-xs px-2 py-1 rounded-md bg-white/5 hover:bg-white/10 transition-colors"
+                    >
+                      Fix
+                    </button>
+                  )}
+                </div>
               </div>
             ))}
           </div>
         </div>
       )}
 
-      {/* Recommendations */}
       {recommendations.length > 0 && (
         <div className="rounded-2xl bg-surface-800 border border-surface-600/50 p-5">
           <h4 className="text-sm font-medium text-slate-300 mb-4">Optimization recommendations</h4>
           <div className="space-y-3">
             {recommendations.map((rec) => (
-              <div key={rec.id} className="flex gap-3 p-4 rounded-xl bg-surface-700/30 border border-surface-600/30">
+              <button
+                key={rec.id}
+                onClick={() => rec.actionCategory && onFixCategory?.(rec.actionCategory)}
+                disabled={!rec.actionCategory || !onFixCategory}
+                className={`w-full text-left flex gap-3 p-4 rounded-xl bg-surface-700/30 border border-surface-600/30 ${
+                  rec.actionCategory && onFixCategory ? 'hover:border-accent-cyan/30 hover:bg-surface-700/50 cursor-pointer' : ''
+                } transition-all`}
+              >
                 <span className={`text-xs px-2 py-1 rounded-md border shrink-0 h-fit ${PRIORITY_STYLES[rec.priority]}`}>
                   {rec.priority}
                 </span>
-                <div>
+                <div className="flex-1">
                   <p className="text-sm font-medium text-white">{rec.title}</p>
                   <p className="text-xs text-slate-400 mt-1 leading-relaxed">{rec.description}</p>
                   {rec.estimatedGain && (
                     <p className="text-xs text-accent-emerald mt-1.5 font-mono">{rec.estimatedGain}</p>
                   )}
+                  {rec.actionCategory && onFixCategory && (
+                    <p className="text-xs text-accent-cyan mt-2">Click to browse {rec.actionCategory} →</p>
+                  )}
                 </div>
-              </div>
+              </button>
             ))}
           </div>
         </div>
