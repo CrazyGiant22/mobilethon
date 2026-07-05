@@ -1,5 +1,6 @@
 import type { BuildAnalysis, Build, ComponentCategory } from '../types'
 import { BottleneckChart } from './BottleneckChart'
+import { BuildRadar } from './BuildRadar'
 
 interface AnalysisPanelProps {
   analysis: BuildAnalysis
@@ -67,6 +68,8 @@ export function AnalysisPanel({ analysis, build, onFixCategory }: AnalysisPanelP
           </div>
         </div>
       </div>
+
+      <BuildRadar analysis={analysis} />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
         <div className="rounded-2xl bg-surface-800 border border-surface-600/50 p-5">

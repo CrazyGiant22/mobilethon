@@ -373,7 +373,7 @@ function Scene({ build, powered, rgbColor }: { build: Build; powered: boolean; r
 
 export default function Build3DScene({ build, powered, rgbColor }: Build3DSceneProps) {
   return (
-    <Canvas camera={{ position: [11, 4, 11], fov: 42 }} dpr={[1, 2]} shadows>
+    <Canvas camera={{ position: [11, 4, 11], fov: 42 }} dpr={[1, 2]} shadows gl={{ preserveDrawingBuffer: true }}>
       <color attach="background" args={['#0a0e17']} />
       <fog attach="fog" args={['#0a0e17', 16, 30]} />
 

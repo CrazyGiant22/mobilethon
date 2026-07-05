@@ -5,6 +5,7 @@ import {
   getSavedBuilds,
   saveBuild,
   deleteSavedBuild,
+  renameSavedBuild,
   deserializeBuild,
   type SavedBuild,
 } from '../utils/storage'
@@ -18,6 +19,8 @@ export function SavedBuilds({ currentBuild, onLoad }: SavedBuildsProps) {
   const [saved, setSaved] = useState<SavedBuild[]>([])
   const [showSaveDialog, setShowSaveDialog] = useState(false)
   const [buildName, setBuildName] = useState('')
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const [editName, setEditName] = useState('')
 
   const refresh = useCallback(() => setSaved(getSavedBuilds()), [])
 
@@ -42,6 +45,20 @@ export function SavedBuilds({ currentBuild, onLoad }: SavedBuildsProps) {
 
   const handleLoad = (entry: SavedBuild) => {
     onLoad(deserializeBuild(entry.componentIds))
+  }
+
+  const startRename = (entry: SavedBuild) => {
+    setEditingId(entry.id)
+    setEditName(entry.name)
+  }
+
+  const commitRename = () => {
+    if (editingId && editName.trim()) {
+      renameSavedBuild(editingId, editName.trim())
+      refresh()
+    }
+    setEditingId(null)
+    setEditName('')
   }
 
   return (
@@ -98,12 +115,35 @@ export function SavedBuilds({ currentBuild, onLoad }: SavedBuildsProps) {
             return (
               <div
                 key={entry.id}
-                className="flex items-center gap-3 p-3 rounded-xl bg-surface-700/40 border border-surface-600/30 group"
+                className="flex items-center gap-2 p-3 rounded-xl bg-surface-700/40 border border-surface-600/30 group"
               >
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-white truncate">{entry.name}</p>
-                  <p className="text-xs text-slate-400">{partCount} parts · {date}</p>
-                </div>
+                {editingId === entry.id ? (
+                  <input
+                    value={editName}
+                    onChange={(e) => setEditName(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') commitRename()
+                      if (e.key === 'Escape') { setEditingId(null); setEditName('') }
+                    }}
+                    onBlur={commitRename}
+                    autoFocus
+                    className="flex-1 min-w-0 px-2 py-1.5 rounded-lg bg-surface-700 border border-accent-cyan/40 text-white text-sm focus:outline-none"
+                  />
+                ) : (
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-white truncate">{entry.name}</p>
+                    <p className="text-xs text-slate-400">{partCount} parts · {date}</p>
+                  </div>
+                )}
+                <button
+                  onClick={() => startRename(entry)}
+                  className="flex items-center justify-center w-9 h-9 rounded-lg text-slate-500 hover:text-accent-cyan active:bg-surface-600 transition-colors shrink-0"
+                  aria-label={`Rename ${entry.name}`}
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  </svg>
+                </button>
                 <button
                   onClick={() => handleLoad(entry)}
                   className="text-sm px-3 py-2 min-h-10 rounded-lg bg-accent-cyan/10 text-accent-cyan border border-accent-cyan/20 hover:bg-accent-cyan/20 active:bg-accent-cyan/25 transition-colors shrink-0"
@@ -112,7 +152,7 @@ export function SavedBuilds({ currentBuild, onLoad }: SavedBuildsProps) {
                 </button>
                 <button
                   onClick={() => handleDelete(entry.id)}
-                  className="flex items-center justify-center w-10 h-10 rounded-lg text-slate-500 hover:text-accent-rose active:bg-surface-600 transition-colors shrink-0"
+                  className="flex items-center justify-center w-9 h-9 rounded-lg text-slate-500 hover:text-accent-rose active:bg-surface-600 transition-colors shrink-0"
                   aria-label={`Delete ${entry.name}`}
                 >
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
