@@ -29,19 +29,37 @@ export function deserializeBuildIds(ids: Record<string, string>): Build {
 
 export function buildToUrlParams(build: Build): string {
   const ids = serializeBuildIds(build)
-  if (Object.keys(ids).length === 0) return ''
-  return new URLSearchParams({ build: JSON.stringify(ids) }).toString()
+  const list = Object.values(ids)
+  if (list.length === 0) return ''
+  // Short, URL-safe encoding: comma-separated component ids (ids are unique + slug-safe).
+  return `b=${list.join(',')}`
 }
 
 export function buildFromUrl(): Build | null {
   const params = new URLSearchParams(window.location.search)
-  const raw = params.get('build')
-  if (!raw) return null
-  try {
-    return deserializeBuildIds(JSON.parse(raw))
-  } catch {
-    return null
+
+  // New compact format: ?b=id1,id2,...
+  const short = params.get('b')
+  if (short) {
+    const build: Build = {}
+    for (const id of short.split(',')) {
+      const comp = getComponentById(id.trim())
+      if (comp) build[comp.category] = comp
+    }
+    return Object.keys(build).length > 0 ? build : null
   }
+
+  // Legacy format: ?build={json}
+  const raw = params.get('build')
+  if (raw) {
+    try {
+      return deserializeBuildIds(JSON.parse(raw))
+    } catch {
+      return null
+    }
+  }
+
+  return null
 }
 
 export function syncBuildUrl(build: Build) {
@@ -69,9 +87,19 @@ export function loadSessionBuild(): Build | null {
   }
 }
 
+const CANONICAL_ORIGIN = 'https://workspace-theta-smoky-77.vercel.app'
+
+/** Use the current origin when it's a public site; fall back to the canonical URL for local/preview. */
+function shareOrigin(): string {
+  const o = window.location.origin
+  const isLocal = /^https?:\/\/(localhost|127\.|0\.0\.0\.0|\[?::1\]?|10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.)/.test(o) || o.includes('.local')
+  return isLocal ? CANONICAL_ORIGIN : o
+}
+
 export function getShareUrl(build: Build): string {
   const params = buildToUrlParams(build)
-  return params ? `${window.location.origin}${window.location.pathname}?${params}` : window.location.origin
+  const base = `${shareOrigin()}/`
+  return params ? `${base}?${params}` : base
 }
 
 /** Returns incompatibility reason, or null if the part fits the current build. */
