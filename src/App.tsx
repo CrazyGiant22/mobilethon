@@ -20,6 +20,7 @@ import { BuildVisualizer } from './components/BuildVisualizer'
 import { UseCaseSelector } from './components/UseCaseSelector'
 import { BuildToolbar } from './components/BuildToolbar'
 import { FpsEstimator } from './components/FpsEstimator'
+import { Build3DViewer } from './components/Build3DViewer'
 import { MobileBuildBar } from './components/MobileBuildBar'
 
 const EMPTY_BUILD: Build = {}
@@ -118,8 +119,9 @@ export default function App() {
                 </div>
               </div>
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
-                <div className="lg:col-span-2">
+                <div className="lg:col-span-2 space-y-4">
                   <BuildVisualizer build={build} />
+                  <Build3DViewer build={build} />
                 </div>
                 <UseCaseSelector value={useCase} onChange={setUseCase} />
               </div>
