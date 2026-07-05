@@ -1,6 +1,8 @@
 import { useRef, useMemo } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { OrbitControls, ContactShadows, RoundedBox } from '@react-three/drei'
+import { OrbitControls, ContactShadows, RoundedBox, Environment, Lightformer } from '@react-three/drei'
+import { EffectComposer, Bloom, SSAO, Vignette, SMAA } from '@react-three/postprocessing'
+import { BlendFunction } from 'postprocessing'
 import * as THREE from 'three'
 import type { Build } from '../types'
 
@@ -11,9 +13,9 @@ interface Build3DSceneProps {
 }
 
 const PCB = '#0a2620'
-const METAL_LIGHT = { metalness: 0.85, roughness: 0.28 }
-const METAL_DARK = { metalness: 0.75, roughness: 0.35 }
-const PLASTIC = { metalness: 0.15, roughness: 0.7 }
+const METAL_LIGHT = { metalness: 0.9, roughness: 0.25, envMapIntensity: 1.4 }
+const METAL_DARK = { metalness: 0.8, roughness: 0.4, envMapIntensity: 1.0 }
+const PLASTIC = { metalness: 0.2, roughness: 0.6, envMapIntensity: 0.6 }
 
 /* ------------------------------- Fan ------------------------------- */
 function Fan({
@@ -383,24 +385,49 @@ function Scene({ build, powered, rgbColor }: { build: Build; powered: boolean; r
 
 export default function Build3DScene({ build, powered, rgbColor }: Build3DSceneProps) {
   return (
-    <Canvas camera={{ position: [11, 4, 11], fov: 42 }} dpr={[1, 2]} shadows gl={{ preserveDrawingBuffer: true, antialias: true }}>
+    <Canvas
+      camera={{ position: [11, 4, 11], fov: 42 }}
+      dpr={[1, 2]}
+      shadows
+      gl={{ preserveDrawingBuffer: true, antialias: false, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.05 }}
+    >
       <color attach="background" args={['#0a0e17']} />
       <fog attach="fog" args={['#0a0e17', 16, 30]} />
 
-      <ambientLight intensity={powered ? 0.7 : 0.5} />
-      <hemisphereLight args={['#8fb7ff', '#1a1030', 0.9]} />
-      <directionalLight position={[6, 9, 5]} intensity={2.2} castShadow shadow-mapSize={[1024, 1024]} />
-      <directionalLight position={[-6, 4, -4]} intensity={0.9} color="#bcd3ff" />
-      <spotLight position={[0, 10, 2]} angle={0.6} penumbra={0.6} intensity={120} color="#ffffff" castShadow />
-      <pointLight position={[-4, 2, 5]} intensity={powered ? 70 : 25} color="#22d3ee" distance={18} />
-      <pointLight position={[5, 3, -3]} intensity={powered ? 55 : 20} color="#a78bfa" distance={18} />
-      <pointLight position={[4, -2, 4]} intensity={35} color="#38bdf8" distance={16} />
-      <pointLight position={[-3, -3, -3]} intensity={25} color="#fb7185" distance={14} />
-      <spotLight position={[-2, 4, -8]} angle={0.8} penumbra={1} intensity={90} color="#22d3ee" />
+      {/* In-scene studio environment for real reflections on metal & glass */}
+      <Environment resolution={256}>
+        <Lightformer intensity={2.2} color="#bcd3ff" position={[0, 6, -6]} scale={[12, 6, 1]} />
+        <Lightformer intensity={1.6} color="#22d3ee" position={[-6, 2, 4]} scale={[6, 8, 1]} rotation={[0, Math.PI / 2, 0]} />
+        <Lightformer intensity={1.4} color="#a78bfa" position={[6, 3, -3]} scale={[6, 8, 1]} rotation={[0, -Math.PI / 2, 0]} />
+        <Lightformer intensity={1.0} color="#ffffff" position={[0, -5, 0]} scale={[12, 12, 1]} rotation={[Math.PI / 2, 0, 0]} />
+      </Environment>
+
+      <ambientLight intensity={powered ? 0.5 : 0.35} />
+      <hemisphereLight args={['#8fb7ff', '#1a1030', 0.7]} />
+      <directionalLight position={[6, 9, 5]} intensity={2.0} castShadow shadow-mapSize={[2048, 2048]} shadow-bias={-0.0004} />
+      <directionalLight position={[-6, 4, -4]} intensity={0.8} color="#bcd3ff" />
+      <spotLight position={[0, 10, 2]} angle={0.6} penumbra={0.7} intensity={110} color="#ffffff" castShadow />
+      <pointLight position={[-4, 2, 5]} intensity={powered ? 60 : 20} color="#22d3ee" distance={18} />
+      <pointLight position={[5, 3, -3]} intensity={powered ? 48 : 16} color="#a78bfa" distance={18} />
+      <pointLight position={[4, -2, 4]} intensity={30} color="#38bdf8" distance={16} />
 
       <Scene build={build} powered={powered} rgbColor={rgbColor} />
-      <ContactShadows position={[0, -3.65, 0]} opacity={0.6} scale={20} blur={2.5} far={5} />
-      <OrbitControls enablePan={false} minDistance={7} maxDistance={24} autoRotate autoRotateSpeed={0.8} target={[1.5, 0, 0]} />
+      <ContactShadows position={[0, -3.65, 0]} opacity={0.7} scale={20} blur={2.8} far={5} resolution={1024} />
+      <OrbitControls enablePan={false} minDistance={7} maxDistance={24} autoRotate autoRotateSpeed={0.7} target={[1.5, 0, 0]} />
+
+      <EffectComposer multisampling={0}>
+        <SSAO
+          blendFunction={BlendFunction.MULTIPLY}
+          samples={16}
+          radius={0.06}
+          intensity={22}
+          luminanceInfluence={0.5}
+          color={new THREE.Color('black')}
+        />
+        <Bloom mipmapBlur intensity={powered ? 0.9 : 0.35} luminanceThreshold={0.55} luminanceSmoothing={0.2} />
+        <Vignette eskil={false} offset={0.2} darkness={0.7} />
+        <SMAA />
+      </EffectComposer>
     </Canvas>
   )
 }

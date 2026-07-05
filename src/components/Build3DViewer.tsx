@@ -1,8 +1,27 @@
-import { Suspense, lazy, useState, useRef } from 'react'
+import { Suspense, lazy, useState, useRef, Component, type ReactNode } from 'react'
 import type { Build } from '../types'
 import { BUILD_CATEGORIES } from '../types'
 
 const Build3DScene = lazy(() => import('./Build3DScene'))
+
+class SceneErrorBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
+  state = { failed: false }
+  static getDerivedStateFromError() {
+    return { failed: true }
+  }
+  render() {
+    if (this.state.failed) {
+      return (
+        <div className="absolute inset-0 flex items-center justify-center text-center p-6">
+          <p className="text-sm text-slate-400">
+            3D preview couldn’t load on this device (WebGL may be unavailable). The rest of BuildForge works fine.
+          </p>
+        </div>
+      )
+    }
+    return this.props.children
+  }
+}
 
 interface Build3DViewerProps {
   build: Build
@@ -98,9 +117,11 @@ export function Build3DViewer({ build }: Build3DViewerProps) {
       {active ? (
         <>
           <div ref={canvasWrapRef} className="relative h-[340px] sm:h-[420px] w-full">
-            <Suspense fallback={<Loader />}>
-              <Build3DScene build={build} powered={powered} rgbColor={rgbColor} />
-            </Suspense>
+            <SceneErrorBoundary>
+              <Suspense fallback={<Loader />}>
+                <Build3DScene build={build} powered={powered} rgbColor={rgbColor} />
+              </Suspense>
+            </SceneErrorBoundary>
             <p className="absolute bottom-2 left-0 right-0 text-center text-[11px] text-slate-500 pointer-events-none">
               Drag to rotate · scroll to zoom{powered ? '' : ' · press Power on to boot'}
             </p>
