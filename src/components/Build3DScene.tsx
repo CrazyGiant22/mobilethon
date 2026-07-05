@@ -268,8 +268,8 @@ function Storage() {
 
 function Monitor({ sizeInches, powered }: { sizeInches: number; powered: boolean }) {
   const screenMat = useRef<THREE.MeshStandardMaterial>(null)
-  const scale = 1 + (sizeInches - 24) / 60
-  const w = 3.4 * scale
+  const scale = 1 + (sizeInches - 24) / 45
+  const w = 6.6 * scale
   const h = (w * 9) / 16
   const groundY = -3.5
 
@@ -283,18 +283,19 @@ function Monitor({ sizeInches, powered }: { sizeInches: number; powered: boolean
     }
   })
 
-  const screenBottom = groundY + 1.1
+  const neckHeight = 1.5
+  const screenBottom = groundY + neckHeight + 0.1
   const screenCenterY = screenBottom + h / 2
 
   return (
-    <group position={[5.2, 0, 0.5]} rotation={[0, -0.6, 0]}>
+    <group position={[7.4, 0, 0.5]} rotation={[0, -0.6, 0]}>
       {/* Stand base + neck */}
       <mesh position={[0, groundY + 0.05, 0]}>
-        <cylinderGeometry args={[w * 0.28, w * 0.32, 0.1, 24]} />
+        <cylinderGeometry args={[w * 0.2, w * 0.24, 0.12, 24]} />
         <meshStandardMaterial color="#0e131c" {...METAL} />
       </mesh>
-      <mesh position={[0, groundY + 0.6, 0]}>
-        <boxGeometry args={[0.22, 1.1, 0.22]} />
+      <mesh position={[0, groundY + neckHeight / 2, 0]}>
+        <boxGeometry args={[0.28, neckHeight, 0.28]} />
         <meshStandardMaterial color="#1b2433" {...METAL} />
       </mesh>
       {/* Bezel */}
@@ -363,7 +364,7 @@ function Scene({ build, powered }: { build: Build; powered: boolean }) {
 
 export default function Build3DScene({ build, powered }: Build3DSceneProps) {
   return (
-    <Canvas camera={{ position: [8, 3.5, 8], fov: 42 }} dpr={[1, 2]} shadows>
+    <Canvas camera={{ position: [11, 4, 11], fov: 42 }} dpr={[1, 2]} shadows>
       <color attach="background" args={['#0a0e17']} />
       <fog attach="fog" args={['#0a0e17', 16, 30]} />
 
@@ -384,11 +385,11 @@ export default function Build3DScene({ build, powered }: Build3DSceneProps) {
       <ContactShadows position={[0, -3.6, 0]} opacity={0.6} scale={20} blur={2.5} far={5} />
       <OrbitControls
         enablePan={false}
-        minDistance={6}
-        maxDistance={18}
+        minDistance={7}
+        maxDistance={24}
         autoRotate
         autoRotateSpeed={0.8}
-        target={[0.5, 0, 0]}
+        target={[1.5, 0, 0]}
       />
     </Canvas>
   )
