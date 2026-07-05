@@ -12,7 +12,8 @@ const NAV_ITEMS: { id: AppView; label: string; href: string }[] = [
 
 export function Header({ view, onViewChange }: HeaderProps) {
   return (
-    <header className="border-b border-surface-600/50 bg-surface-900/80 backdrop-blur-md sticky top-0 z-40">
+    <header className="relative border-b border-surface-600/50 bg-surface-900/70 backdrop-blur-xl sticky top-0 z-40">
+      <div className="absolute bottom-0 inset-x-0 h-px tech-scanbar" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         <button onClick={() => onViewChange('builder')} className="flex items-center gap-3 group" aria-label="BuildForge home">
           <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-accent-cyan to-accent-blue flex items-center justify-center glow-cyan">

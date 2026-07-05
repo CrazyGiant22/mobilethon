@@ -22,6 +22,7 @@ import { BuildToolbar } from './components/BuildToolbar'
 import { FpsEstimator } from './components/FpsEstimator'
 import { Build3DViewer } from './components/Build3DViewer'
 import { MobileBuildBar } from './components/MobileBuildBar'
+import { TechBackground } from './components/TechBackground'
 
 const EMPTY_BUILD: Build = {}
 
@@ -93,6 +94,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen grid-bg">
+      <TechBackground />
       <a href="#builder" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-3 focus:py-2 focus:bg-accent-cyan focus:text-surface-900 focus:rounded-lg">
         Skip to content
       </a>

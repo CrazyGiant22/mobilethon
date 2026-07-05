@@ -14,7 +14,7 @@ export function Build3DViewer({ build }: Build3DViewerProps) {
   const canRender = Boolean(build.motherboard || build.case || build.cpu || build.gpu)
 
   return (
-    <div className="rounded-2xl bg-surface-800 border border-surface-600/50 overflow-hidden">
+    <div className="tech-card rounded-2xl bg-surface-800 border border-surface-600/50 overflow-hidden">
       <div className="px-5 py-4 border-b border-surface-600/50 flex items-center justify-between gap-3">
         <div>
           <h3 className="font-semibold text-white flex items-center gap-2">

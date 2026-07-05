@@ -64,7 +64,7 @@ export function PresetBuilds({ onLoad, hasExistingBuild }: PresetBuildsProps) {
           <button
             key={preset.id}
             onClick={() => loadPreset(preset.parts)}
-            className="text-left p-4 rounded-xl bg-surface-800 border border-surface-600/50 hover:border-accent-cyan/40 hover:bg-surface-700/50 transition-all group"
+            className="tech-card text-left p-4 rounded-xl bg-surface-800 border border-surface-600/50 hover:bg-surface-700/50 group"
           >
             <span className="font-semibold text-white group-hover:text-accent-cyan transition-colors">
               {preset.name}

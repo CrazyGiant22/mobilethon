@@ -12,7 +12,7 @@ export function BuildVisualizer({ build }: BuildVisualizerProps) {
   if (parts.length === 0) return null
 
   return (
-    <div className="rounded-2xl bg-surface-800 border border-surface-600/50 overflow-hidden">
+    <div className="tech-card rounded-2xl bg-surface-800 border border-surface-600/50 overflow-hidden">
       <div className="px-5 py-4 border-b border-surface-600/50">
         <h3 className="font-semibold text-white">Build Overview</h3>
         <p className="text-xs text-slate-400 mt-0.5">{parts.length} components selected</p>
