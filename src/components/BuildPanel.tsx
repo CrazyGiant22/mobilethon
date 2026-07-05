@@ -1,7 +1,7 @@
 import type { Build, ComponentCategory } from '../types'
 import { CATEGORY_ORDER, CATEGORY_LABELS } from '../types'
 import { ComponentVisual } from './ComponentVisual'
-import { buyUrl } from '../utils/retailers'
+import { BuyMenu } from './BuyMenu'
 import { useCurrency } from '../currency'
 
 interface BuildPanelProps {
@@ -60,19 +60,7 @@ export function BuildPanel({ build, onSlotClick, onClear }: BuildPanelProps) {
                 </div>
               </button>
               {part ? (
-                <a
-                  href={buyUrl(part)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={(e) => e.stopPropagation()}
-                  title={`Find ${part.name} at a retailer`}
-                  className="shrink-0 flex items-center gap-1 text-xs px-2.5 py-1.5 rounded-lg bg-surface-600/50 text-slate-300 hover:text-accent-cyan hover:bg-surface-600 transition-colors"
-                >
-                  Buy
-                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                  </svg>
-                </a>
+                <BuyMenu component={part} />
               ) : (
                 <svg className="w-4 h-4 text-slate-500 group-hover:text-accent-cyan shrink-0 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
