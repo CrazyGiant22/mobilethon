@@ -28,7 +28,7 @@ const PRIORITY_STYLES = {
 }
 
 export function AnalysisPanel({ analysis, build, onFixCategory }: AnalysisPanelProps) {
-  const { issues, bottleneck, power, performance, recommendations } = analysis
+  const { issues, bottleneck, power, thermal, performance, recommendations } = analysis
   const hasBuild = build.cpu || build.gpu
 
   if (!hasBuild) {
@@ -97,6 +97,41 @@ export function AnalysisPanel({ analysis, build, onFixCategory }: AnalysisPanelP
                 PSU is undersized. Upgrade to at least {power.recommendedWattage}W.
               </p>
             )}
+          </div>
+        </div>
+
+        {/* Thermals & noise */}
+        <div className="rounded-2xl bg-surface-800 border border-surface-600/50 p-5 md:col-span-2">
+          <div className="flex items-center justify-between mb-4">
+            <h4 className="text-sm font-medium text-slate-300">Thermals &amp; Noise</h4>
+            <span className={`text-xs px-2 py-0.5 rounded-full border ${
+              thermal.noiseLabel === 'Silent' || thermal.noiseLabel === 'Quiet'
+                ? 'bg-accent-emerald/10 text-accent-emerald border-accent-emerald/25'
+                : thermal.noiseLabel === 'Moderate'
+                  ? 'bg-accent-amber/10 text-accent-amber border-accent-amber/25'
+                  : 'bg-accent-rose/10 text-accent-rose border-accent-rose/25'
+            }`}>
+              {thermal.noiseLabel} · ~{thermal.noiseDb} dB
+            </span>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
+            <div>
+              <div className="flex justify-between text-xs mb-1.5">
+                <span className="text-slate-400">Cooling headroom</span>
+                <span className="font-mono text-slate-300">{thermal.coolingScore}/100</span>
+              </div>
+              <div className="h-3 rounded-full bg-surface-600 overflow-hidden">
+                <div
+                  className={`h-full rounded-full transition-all duration-700 bg-gradient-to-r ${
+                    thermal.coolingScore >= 60 ? 'from-accent-emerald to-accent-cyan'
+                      : thermal.coolingScore >= 45 ? 'from-accent-amber to-accent-cyan'
+                        : 'from-accent-rose to-accent-amber'
+                  }`}
+                  style={{ width: `${thermal.coolingScore}%` }}
+                />
+              </div>
+            </div>
+            <p className="text-sm text-slate-400 leading-relaxed">{thermal.verdict}</p>
           </div>
         </div>
       </div>

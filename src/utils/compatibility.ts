@@ -192,6 +192,48 @@ export function checkCompatibility(build: Build): CompatibilityIssue[] {
     }
   }
 
+  if (build.gpu && build.psu) {
+    const draw = Number(build.gpu.powerDraw ?? 0)
+    if (draw >= 300) {
+      issues.push({
+        id: 'gpu-connector',
+        severity: 'info',
+        title: 'High-power GPU connector',
+        message: `${build.gpu.name} draws ${draw}W — use an ATX 3.0 PSU with a native 12VHPWR (12V-2x6) cable, or the included adapter.`,
+        category: 'psu',
+      })
+    }
+  }
+
+  if (build.motherboard && build.gpu) {
+    const boardPcie = Number(build.motherboard.specs.pcie ?? 0)
+    const series = String(build.gpu.specs.series ?? '')
+    const modern = series === 'RTX 40' || series === 'RTX 50' || !series // current-gen default
+    if (boardPcie > 0 && boardPcie < 4 && modern && (build.gpu.performanceScore ?? 0) >= 70) {
+      issues.push({
+        id: 'pcie-gen',
+        severity: 'info',
+        title: 'Older PCIe generation',
+        message: `Motherboard runs PCIe ${boardPcie}. This GPU will work fine, but a PCIe 4.0+ board avoids any bandwidth limits.`,
+        category: 'motherboard',
+      })
+    }
+  }
+
+  if (build.motherboard && build.ram) {
+    const ff = String(build.motherboard.specs.formFactor)
+    const modules = Number(build.ram.specs.modules ?? 2)
+    if (ff === 'mini-ITX' && modules > 2) {
+      issues.push({
+        id: 'ram-slots',
+        severity: 'error',
+        title: 'Too many RAM sticks for board',
+        message: `Mini-ITX boards have only 2 DIMM slots, but this kit is ${modules} modules. Choose a 2-stick kit.`,
+        category: 'ram',
+      })
+    }
+  }
+
   if (build.gpu && build.monitor) {
     const pixels = Number(build.monitor.specs.pixels)
     const refresh = Number(build.monitor.specs.refreshRate)

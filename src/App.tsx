@@ -18,6 +18,7 @@ import { SavedBuilds } from './components/SavedBuilds'
 import { ComparePanel } from './components/ComparePanel'
 import { BuildVisualizer } from './components/BuildVisualizer'
 import { UseCaseSelector } from './components/UseCaseSelector'
+import { AutoBuilder } from './components/AutoBuilder'
 import { BuildToolbar } from './components/BuildToolbar'
 import { FpsEstimator } from './components/FpsEstimator'
 import { Build3DViewer } from './components/Build3DViewer'
@@ -125,7 +126,15 @@ export default function App() {
                   <BuildVisualizer build={build} />
                   <Build3DViewer build={build} />
                 </div>
-                <UseCaseSelector value={useCase} onChange={setUseCase} />
+                <div className="space-y-4">
+                  <AutoBuilder
+                    useCase={useCase}
+                    onUseCaseChange={setUseCase}
+                    onGenerate={loadPreset}
+                    hasExistingBuild={Object.values(build).some(Boolean)}
+                  />
+                  <UseCaseSelector value={useCase} onChange={setUseCase} />
+                </div>
               </div>
               <div className="grid grid-cols-1 xl:grid-cols-5 gap-6">
                 <div className="xl:col-span-2 space-y-4">

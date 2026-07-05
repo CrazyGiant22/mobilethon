@@ -96,6 +96,13 @@ export interface PowerEstimate {
   psuAdequate: boolean
 }
 
+export interface ThermalEstimate {
+  coolingScore: number
+  noiseDb: number
+  noiseLabel: 'Silent' | 'Quiet' | 'Moderate' | 'Loud'
+  verdict: string
+}
+
 export interface PerformanceProfile {
   gamingScore: number
   productivityScore: number
@@ -116,6 +123,7 @@ export interface BuildAnalysis {
   issues: CompatibilityIssue[]
   bottleneck: BottleneckResult
   power: PowerEstimate
+  thermal: ThermalEstimate
   performance: PerformanceProfile
   recommendations: Recommendation[]
   totalCost: number

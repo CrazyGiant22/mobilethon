@@ -3,6 +3,7 @@ import { CATEGORY_ORDER } from '../types'
 import { checkCompatibility } from './compatibility'
 import { analyzeBottleneck } from './bottleneck'
 import { estimatePower } from './power'
+import { estimateThermal } from './thermal'
 import { calculatePerformance } from './performance'
 import { generateRecommendations } from './recommendations'
 
@@ -13,6 +14,7 @@ export function analyzeBuild(build: Build, useCase: UseCase = '1440p'): BuildAna
   const issues = checkCompatibility(build)
   const bottleneck = analyzeBottleneck(build, useCase)
   const power = estimatePower(build)
+  const thermal = estimateThermal(build)
   const performance = calculatePerformance(build)
   const recommendations = generateRecommendations(build, bottleneck, power)
 
@@ -33,6 +35,7 @@ export function analyzeBuild(build: Build, useCase: UseCase = '1440p'): BuildAna
     issues,
     bottleneck,
     power,
+    thermal,
     performance,
     recommendations,
     totalCost,
