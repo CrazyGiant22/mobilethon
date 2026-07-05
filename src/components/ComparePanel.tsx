@@ -49,24 +49,26 @@ export function ComparePanel({ onUseInBuild }: ComparePanelProps) {
   return (
     <section id="compare" className="animate-fade-in space-y-6">
       <div>
-        <h3 className="text-2xl font-bold text-white">Component Comparison</h3>
-        <p className="text-slate-400 mt-1">Pick two parts side-by-side to see specs, scores, and value differences.</p>
+        <h3 className="text-xl sm:text-2xl font-bold text-white">Component Comparison</h3>
+        <p className="text-sm sm:text-base text-slate-400 mt-1">Pick two parts side-by-side to see specs, scores, and value differences.</p>
       </div>
 
-      <div className="flex flex-wrap gap-2">
-        {COMPARE_CATEGORIES.map((cat) => (
-          <button
-            key={cat}
-            onClick={() => handleCategoryChange(cat)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-              category === cat
-                ? 'bg-accent-cyan/15 text-accent-cyan border border-accent-cyan/30'
-                : 'bg-surface-800 text-slate-400 border border-surface-600/50 hover:text-white'
-            }`}
-          >
-            {CATEGORY_LABELS[cat]}
-          </button>
-        ))}
+      <div className="-mx-4 px-4 sm:mx-0 sm:px-0 overflow-x-auto">
+        <div className="flex gap-2 w-max sm:w-auto sm:flex-wrap">
+          {COMPARE_CATEGORIES.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => handleCategoryChange(cat)}
+              className={`shrink-0 px-4 py-2 min-h-11 rounded-lg text-sm font-medium transition-all ${
+                category === cat
+                  ? 'bg-accent-cyan/15 text-accent-cyan border border-accent-cyan/30'
+                  : 'bg-surface-800 text-slate-400 border border-surface-600/50 hover:text-white'
+              }`}
+            >
+              {CATEGORY_LABELS[cat]}
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -107,14 +109,14 @@ export function ComparePanel({ onUseInBuild }: ComparePanelProps) {
 
           {/* Spec table */}
           <div className="border-t border-surface-600/50">
-            <div className="px-5 py-3 bg-surface-700/30">
+            <div className="px-4 sm:px-5 py-3 bg-surface-700/30">
               <h4 className="text-sm font-medium text-slate-300">Specifications</h4>
             </div>
             <div className="divide-y divide-surface-600/30">
-              <div className="grid grid-cols-3 px-5 py-2 text-xs text-slate-500 uppercase tracking-wider">
+              <div className="grid grid-cols-[1.4fr_1fr_1fr] px-4 sm:px-5 py-2 text-xs text-slate-500 uppercase tracking-wider gap-2">
                 <span>Spec</span>
-                <span className="text-center">A</span>
-                <span className="text-center">B</span>
+                <span className="text-right sm:text-center">A</span>
+                <span className="text-right sm:text-center">B</span>
               </div>
               {allSpecKeys.map((key) => {
                 const valA = left.specs[key]
@@ -124,33 +126,33 @@ export function ComparePanel({ onUseInBuild }: ComparePanelProps) {
                   winner = isBetterSpec(key, valA, valB)
                 }
                 return (
-                  <div key={key} className="grid grid-cols-3 px-5 py-2.5 text-sm hover:bg-surface-700/20">
-                    <span className="text-slate-400 capitalize">{key.replace(/([A-Z])/g, ' $1')}</span>
-                    <span className={`text-center font-mono ${winner === 'a' ? 'text-accent-emerald' : 'text-slate-300'}`}>
+                  <div key={key} className="grid grid-cols-[1.4fr_1fr_1fr] gap-2 px-4 sm:px-5 py-2.5 text-sm hover:bg-surface-700/20">
+                    <span className="text-slate-400 capitalize break-words">{key.replace(/([A-Z])/g, ' $1')}</span>
+                    <span className={`text-right sm:text-center font-mono break-words ${winner === 'a' ? 'text-accent-emerald' : 'text-slate-300'}`}>
                       {valA !== undefined ? formatSpecValue(valA) : '—'}
                     </span>
-                    <span className={`text-center font-mono ${winner === 'b' ? 'text-accent-emerald' : 'text-slate-300'}`}>
+                    <span className={`text-right sm:text-center font-mono break-words ${winner === 'b' ? 'text-accent-emerald' : 'text-slate-300'}`}>
                       {valB !== undefined ? formatSpecValue(valB) : '—'}
                     </span>
                   </div>
                 )
               })}
-              <div className="grid grid-cols-3 px-5 py-2.5 text-sm bg-surface-700/20">
+              <div className="grid grid-cols-[1.4fr_1fr_1fr] gap-2 px-4 sm:px-5 py-2.5 text-sm bg-surface-700/20">
                 <span className="text-slate-400">Price</span>
-                <span className={`text-center font-mono font-bold ${left.price < right.price ? 'text-accent-emerald' : 'text-white'}`}>
+                <span className={`text-right sm:text-center font-mono font-bold ${left.price < right.price ? 'text-accent-emerald' : 'text-white'}`}>
                   ${left.price}
                 </span>
-                <span className={`text-center font-mono font-bold ${right.price < left.price ? 'text-accent-emerald' : 'text-white'}`}>
+                <span className={`text-right sm:text-center font-mono font-bold ${right.price < left.price ? 'text-accent-emerald' : 'text-white'}`}>
                   ${right.price}
                 </span>
               </div>
               {left.performanceScore && right.performanceScore && (
-                <div className="grid grid-cols-3 px-5 py-2.5 text-sm bg-surface-700/20">
-                  <span className="text-slate-400">Value (score per $100)</span>
-                  <span className={`text-center font-mono ${(left.performanceScore / left.price) > (right.performanceScore / right.price) ? 'text-accent-emerald' : 'text-slate-300'}`}>
+                <div className="grid grid-cols-[1.4fr_1fr_1fr] gap-2 px-4 sm:px-5 py-2.5 text-sm bg-surface-700/20">
+                  <span className="text-slate-400">Value <span className="text-slate-500">(score/$100)</span></span>
+                  <span className={`text-right sm:text-center font-mono ${(left.performanceScore / left.price) > (right.performanceScore / right.price) ? 'text-accent-emerald' : 'text-slate-300'}`}>
                     {(left.performanceScore / left.price * 100).toFixed(1)}
                   </span>
-                  <span className={`text-center font-mono ${(right.performanceScore / right.price) > (left.performanceScore / left.price) ? 'text-accent-emerald' : 'text-slate-300'}`}>
+                  <span className={`text-right sm:text-center font-mono ${(right.performanceScore / right.price) > (left.performanceScore / left.price) ? 'text-accent-emerald' : 'text-slate-300'}`}>
                     {(right.performanceScore / right.price * 100).toFixed(1)}
                   </span>
                 </div>
@@ -192,7 +194,7 @@ function CompareSelector({
       <select
         value={selectedId}
         onChange={(e) => onChange(e.target.value)}
-        className={`w-full px-4 py-3 rounded-xl bg-surface-800 border border-surface-600/50 text-white text-sm focus:outline-none ${borderColor}`}
+        className={`w-full px-4 py-3 min-h-12 rounded-xl bg-surface-800 border border-surface-600/50 text-white text-base sm:text-sm focus:outline-none ${borderColor}`}
       >
         <option value="">Select component…</option>
         {items.map((c) => (
@@ -243,7 +245,7 @@ function CompareCard({
       )}
       <button
         onClick={onUse}
-        className="mt-4 text-xs px-3 py-1.5 rounded-lg bg-surface-700 text-slate-300 border border-surface-600/50 hover:text-white hover:border-accent-cyan/30 transition-colors"
+        className="mt-4 text-sm px-4 py-2.5 min-h-11 rounded-lg bg-surface-700 text-slate-300 border border-surface-600/50 hover:text-white hover:border-accent-cyan/30 active:bg-surface-600 transition-colors w-full sm:w-auto"
       >
         Use in build
       </button>

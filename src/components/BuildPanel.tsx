@@ -18,7 +18,7 @@ export function BuildPanel({ build, onSlotClick, onClear }: BuildPanelProps) {
         {hasParts && (
           <button
             onClick={onClear}
-            className="text-xs text-slate-400 hover:text-accent-rose transition-colors"
+            className="text-sm px-3 py-1.5 -mr-1 rounded-lg text-slate-400 hover:text-accent-rose active:bg-surface-700 transition-colors"
           >
             Clear all
           </button>

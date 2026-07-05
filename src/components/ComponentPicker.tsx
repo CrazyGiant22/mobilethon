@@ -61,7 +61,7 @@ export function ComponentPicker({ build, category, selectedId, onSelect, onClose
   }, [enriched, search, sort, hideIncompatible])
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4">
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} aria-hidden />
       <div
         ref={dialogRef}
@@ -69,14 +69,17 @@ export function ComponentPicker({ build, category, selectedId, onSelect, onClose
         aria-modal="true"
         aria-labelledby="picker-title"
         tabIndex={-1}
-        className="relative w-full max-w-lg max-h-[85vh] flex flex-col rounded-2xl bg-surface-800 border border-surface-600/50 shadow-2xl animate-fade-in outline-none"
+        className="relative w-full sm:max-w-lg h-[90vh] sm:h-auto sm:max-h-[85vh] flex flex-col rounded-t-2xl sm:rounded-2xl bg-surface-800 border border-surface-600/50 shadow-2xl animate-fade-in outline-none pb-safe"
       >
-        <div className="px-5 py-4 border-b border-surface-600/50 flex items-center justify-between shrink-0">
+        <div className="sm:hidden flex justify-center pt-2 pb-1 shrink-0" aria-hidden>
+          <span className="w-10 h-1 rounded-full bg-surface-600" />
+        </div>
+        <div className="px-5 py-3 sm:py-4 border-b border-surface-600/50 flex items-center justify-between shrink-0">
           <h3 id="picker-title" className="font-semibold text-white">Select {CATEGORY_LABELS[category]}</h3>
           <button
             onClick={onClose}
             aria-label="Close picker"
-            className="text-slate-400 hover:text-white transition-colors p-1"
+            className="flex items-center justify-center w-9 h-9 -mr-1 rounded-lg text-slate-400 hover:text-white active:bg-surface-700 transition-colors"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -96,18 +99,18 @@ export function ComponentPicker({ build, category, selectedId, onSelect, onClose
             <select
               value={sort}
               onChange={(e) => setSort(e.target.value as SortMode)}
-              className="text-xs px-2 py-1.5 rounded-lg bg-surface-700 border border-surface-600/50 text-slate-300"
+              className="text-sm sm:text-xs px-3 py-2 sm:py-1.5 rounded-lg bg-surface-700 border border-surface-600/50 text-slate-300"
             >
               <option value="score-desc">Best performance</option>
               <option value="price-asc">Price: low to high</option>
               <option value="price-desc">Price: high to low</option>
             </select>
-            <label className="flex items-center gap-1.5 text-xs text-slate-400 cursor-pointer">
+            <label className="flex items-center gap-2 text-sm sm:text-xs text-slate-400 cursor-pointer py-2 px-1">
               <input
                 type="checkbox"
                 checked={hideIncompatible}
                 onChange={(e) => setHideIncompatible(e.target.checked)}
-                className="rounded border-surface-600"
+                className="w-4 h-4 rounded border-surface-600"
               />
               Compatible only
             </label>

@@ -30,7 +30,7 @@ export function Header({ view, onViewChange }: HeaderProps) {
             <button
               key={item.id}
               onClick={() => onViewChange(item.id)}
-              className={`px-3 sm:px-4 py-2 rounded-lg text-sm transition-all ${
+              className={`px-4 py-2 min-h-10 rounded-lg text-sm transition-all ${
                 view === item.id
                   ? 'bg-accent-cyan/10 text-accent-cyan border border-accent-cyan/20'
                   : 'text-slate-400 hover:text-white border border-transparent'

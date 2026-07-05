@@ -17,6 +17,7 @@
 
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -26,6 +27,26 @@ body {
   color: #e2e8f0;
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Comfortable touch targets on coarse (touch) pointers */
+@media (pointer: coarse) {
+  button,
+  select,
+  a[role='button'],
+  input[type='checkbox'] {
+    touch-action: manipulation;
+  }
+}
+
+.safe-bottom {
+  padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
+}
+
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 #root {
