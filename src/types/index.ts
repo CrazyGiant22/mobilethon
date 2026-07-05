@@ -1,5 +1,14 @@
 export type AppView = 'builder' | 'compare'
 
+export type UseCase = '1080p' | '1440p' | '4k' | 'productivity'
+
+export const USE_CASE_LABELS: Record<UseCase, string> = {
+  '1080p': '1080p Gaming',
+  '1440p': '1440p Gaming',
+  '4k': '4K Gaming',
+  productivity: 'Productivity',
+}
+
 export type ComponentCategory =
   | 'cpu'
   | 'gpu'
@@ -71,6 +80,7 @@ export interface Recommendation {
   title: string
   description: string
   estimatedGain?: string
+  actionCategory?: ComponentCategory
 }
 
 export interface BuildAnalysis {
@@ -81,6 +91,9 @@ export interface BuildAnalysis {
   recommendations: Recommendation[]
   totalCost: number
   completeness: number
+  coreCompleteness: number
+  errorCount: number
+  warningCount: number
 }
 
 export const CATEGORY_LABELS: Record<ComponentCategory, string> = {
