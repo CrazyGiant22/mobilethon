@@ -10,6 +10,7 @@ interface Build3DViewerProps {
 
 export function Build3DViewer({ build }: Build3DViewerProps) {
   const [active, setActive] = useState(false)
+  const [powered, setPowered] = useState(false)
   const partCount = BUILD_CATEGORIES.filter((c) => build[c]).length
   const canRender = Boolean(build.motherboard || build.case || build.cpu || build.gpu)
 
@@ -28,22 +29,38 @@ export function Build3DViewer({ build }: Build3DViewerProps) {
           </p>
         </div>
         {active && (
-          <button
-            onClick={() => setActive(false)}
-            className="text-xs px-3 py-1.5 rounded-lg text-slate-400 hover:text-white active:bg-surface-700 transition-colors shrink-0"
-          >
-            Hide
-          </button>
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              onClick={() => setPowered((p) => !p)}
+              aria-pressed={powered}
+              className={`inline-flex items-center gap-1.5 text-xs px-3 py-1.5 min-h-9 rounded-lg border font-medium transition-all ${
+                powered
+                  ? 'bg-accent-emerald/15 text-accent-emerald border-accent-emerald/30 shadow-[0_0_18px_-4px_rgba(52,211,153,0.6)]'
+                  : 'bg-surface-700 text-slate-300 border-surface-600/50 hover:text-white'
+              }`}
+            >
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.36 6.64a9 9 0 11-12.73 0M12 2v10" />
+              </svg>
+              {powered ? 'Power off' : 'Power on'}
+            </button>
+            <button
+              onClick={() => setActive(false)}
+              className="text-xs px-3 py-1.5 rounded-lg text-slate-400 hover:text-white active:bg-surface-700 transition-colors"
+            >
+              Hide
+            </button>
+          </div>
         )}
       </div>
 
       {active ? (
         <div className="relative h-[340px] sm:h-[420px] w-full">
           <Suspense fallback={<Loader />}>
-            <Build3DScene build={build} />
+            <Build3DScene build={build} powered={powered} />
           </Suspense>
           <p className="absolute bottom-2 left-0 right-0 text-center text-[11px] text-slate-500 pointer-events-none">
-            Drag to rotate · scroll to zoom
+            Drag to rotate · scroll to zoom{powered ? '' : ' · press Power on to boot'}
           </p>
         </div>
       ) : (
