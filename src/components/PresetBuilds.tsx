@@ -10,7 +10,7 @@ const PRESETS = [
     id: 'legacy-9th-gen',
     name: '9th Gen Classic',
     description: 'i5-9400F + GTX 1060 — proven 1080p combo',
-    parts: ['cpu-i5-9400f', 'mb-z390', 'ram-16-ddr4', 'gpu-gtx-1060-6gb', 'ssd-500gb-nvme', 'psu-550-bronze', 'cooler-hyper212', 'case-corsair-4000d'],
+    parts: ['cpu-i5-9400f', 'mb-b365m-pro-vdh', 'ram-16-ddr4', 'gpu-gtx-1060-6gb', 'ssd-500gb-nvme', 'psu-550-bronze', 'cooler-hyper212', 'case-corsair-4000d'],
   },
   {
     id: '9th-gen-high',

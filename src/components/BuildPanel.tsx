@@ -1,21 +1,11 @@
 import type { Build, ComponentCategory } from '../types'
 import { CATEGORY_ORDER, CATEGORY_LABELS } from '../types'
+import { ComponentVisual } from './ComponentVisual'
 
 interface BuildPanelProps {
   build: Build
   onSlotClick: (category: ComponentCategory) => void
   onClear: () => void
-}
-
-const CATEGORY_ICONS: Record<ComponentCategory, string> = {
-  cpu: '⚡',
-  gpu: '🎮',
-  motherboard: '🔌',
-  ram: '🧠',
-  storage: '💾',
-  psu: '🔋',
-  cooler: '❄️',
-  case: '🖥️',
 }
 
 export function BuildPanel({ build, onSlotClick, onClear }: BuildPanelProps) {
@@ -43,7 +33,11 @@ export function BuildPanel({ build, onSlotClick, onClear }: BuildPanelProps) {
               onClick={() => onSlotClick(category)}
               className="w-full flex items-center gap-3 p-3 rounded-xl bg-surface-700/40 hover:bg-surface-700 border border-transparent hover:border-accent-cyan/20 transition-all text-left group"
             >
-              <span className="text-xl w-8 text-center shrink-0">{CATEGORY_ICONS[category]}</span>
+              {part ? (
+                <ComponentVisual component={part} size="sm" />
+              ) : (
+                <ComponentVisual category={category} size="sm" className="opacity-40" />
+              )}
               <div className="flex-1 min-w-0">
                 <p className="text-xs text-slate-400 uppercase tracking-wide">{CATEGORY_LABELS[category]}</p>
                 {part ? (

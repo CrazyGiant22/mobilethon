@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react'
 import type { ComponentCategory } from '../types'
 import { CATEGORY_LABELS } from '../types'
 import { getComponentsByCategory } from '../data/components'
+import { ComponentVisual } from './ComponentVisual'
 
 interface ComponentPickerProps {
   category: ComponentCategory
@@ -57,30 +58,35 @@ export function ComponentPicker({ category, selectedId, onSelect, onClose }: Com
             <button
               key={comp.id}
               onClick={() => onSelect(comp.id)}
-              className={`w-full text-left px-4 py-3 rounded-xl transition-all ${
+              className={`w-full text-left px-3 py-3 rounded-xl transition-all ${
                 comp.id === selectedId
                   ? 'bg-accent-cyan/10 border border-accent-cyan/30'
                   : 'hover:bg-surface-700/50 border border-transparent'
               }`}
             >
-              <div className="flex items-start justify-between gap-3">
-                <div className="min-w-0">
-                  <p className="text-sm font-medium text-white truncate">{comp.name}</p>
-                  <p className="text-xs text-slate-400 mt-0.5">{comp.brand}</p>
-                </div>
-                <span className="text-sm font-mono text-accent-emerald shrink-0">${comp.price}</span>
-              </div>
-              {comp.performanceScore && (
-                <div className="mt-2 flex items-center gap-2">
-                  <div className="flex-1 h-1.5 rounded-full bg-surface-600 overflow-hidden">
-                    <div
-                      className="h-full rounded-full bg-gradient-to-r from-accent-cyan to-accent-blue"
-                      style={{ width: `${comp.performanceScore}%` }}
-                    />
+              <div className="flex items-start gap-3">
+                <ComponentVisual component={comp} size="md" />
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium text-white truncate">{comp.name}</p>
+                      <p className="text-xs text-slate-400 mt-0.5">{comp.brand}</p>
+                    </div>
+                    <span className="text-sm font-mono text-accent-emerald shrink-0">${comp.price}</span>
                   </div>
-                  <span className="text-xs font-mono text-slate-400">{comp.performanceScore}</span>
+                  {comp.performanceScore && (
+                    <div className="mt-2 flex items-center gap-2">
+                      <div className="flex-1 h-1.5 rounded-full bg-surface-600 overflow-hidden">
+                        <div
+                          className="h-full rounded-full bg-gradient-to-r from-accent-cyan to-accent-blue"
+                          style={{ width: `${comp.performanceScore}%` }}
+                        />
+                      </div>
+                      <span className="text-xs font-mono text-slate-400">{comp.performanceScore}</span>
+                    </div>
+                  )}
                 </div>
-              )}
+              </div>
             </button>
           ))}
           {filtered.length === 0 && (
