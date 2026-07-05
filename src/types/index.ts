@@ -58,12 +58,35 @@ export interface CompatibilityIssue {
   category: ComponentCategory | 'general'
 }
 
+export type BottleneckSeverity = 'none' | 'minor' | 'moderate' | 'severe'
+
+export interface BottleneckFix {
+  text: string
+  actionCategory?: ComponentCategory
+}
+
+export interface SecondaryBottleneck {
+  id: string
+  component: 'ram' | 'storage' | 'vram'
+  severity: 'minor' | 'moderate'
+  message: string
+  fix: string
+  actionCategory: ComponentCategory
+}
+
 export interface BottleneckResult {
   cpuUtilization: number
   gpuUtilization: number
   balanceScore: number
   verdict: string
   limitingFactor: 'cpu' | 'gpu' | 'balanced' | 'unknown'
+  severity: BottleneckSeverity
+  impactPct: number
+  fixes: BottleneckFix[]
+  prevention: string[]
+  secondary: SecondaryBottleneck[]
+  suggestedUpgradeId?: string
+  suggestedUpgradeCategory?: ComponentCategory
 }
 
 export interface PowerEstimate {

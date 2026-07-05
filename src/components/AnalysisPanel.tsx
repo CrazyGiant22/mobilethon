@@ -68,9 +68,9 @@ export function AnalysisPanel({ analysis, build, onFixCategory }: AnalysisPanelP
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
         <div className="rounded-2xl bg-surface-800 border border-surface-600/50 p-5">
-          <BottleneckChart bottleneck={bottleneck} />
+          <BottleneckChart bottleneck={bottleneck} onFixCategory={onFixCategory} />
         </div>
 
         <div className="rounded-2xl bg-surface-800 border border-surface-600/50 p-5">
