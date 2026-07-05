@@ -46,3 +46,32 @@ BuildForge analyzes your selected components in real time:
 4. **Recommendation engine** suggests targeted upgrades based on detected imbalances
 
 No account required. All analysis runs locally in your browser.
+
+## Deploy on Zeabur
+
+BuildForge is configured for [Zeabur](https://zeabur.com) static deployment via `zbpack.json` (`output_dir: dist`).
+
+### Option A — GitHub (recommended)
+
+1. Go to [zeabur.com](https://zeabur.com) and sign in
+2. **Create Project** → **Deploy your source code**
+3. Import `CrazyGiant22/mobilethon` and select the `main` branch
+4. Zeabur auto-detects Vite, runs `npm run build`, and serves `dist/`
+5. Open **Domains** in the service settings to get your live URL
+
+### Option B — Zeabur CLI
+
+```bash
+npm install
+npx zeabur@latest auth login
+npx zeabur@latest deploy
+```
+
+SPA routing is handled via `public/_redirects` (copied to `dist` on build).
+
+## Live demo (GitHub Pages)
+
+Pushes to `main` also deploy automatically to GitHub Pages at:
+
+https://crazygiant22.github.io/mobilethon/
+
