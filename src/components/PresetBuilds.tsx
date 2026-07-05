@@ -7,6 +7,18 @@ interface PresetBuildsProps {
 
 const PRESETS = [
   {
+    id: 'legacy-9th-gen',
+    name: '9th Gen Classic',
+    description: 'i5-9400F + GTX 1060 — proven 1080p combo',
+    parts: ['cpu-i5-9400f', 'mb-z390', 'ram-16-ddr4', 'gpu-gtx-1060-6gb', 'ssd-500gb-nvme', 'psu-550-bronze', 'cooler-hyper212', 'case-corsair-4000d'],
+  },
+  {
+    id: '9th-gen-high',
+    name: '9th Gen + 1080 Ti',
+    description: 'i7-9700K paired with GTX 1080 Ti',
+    parts: ['cpu-i7-9700k', 'mb-z390-aorus', 'ram-32-ddr4', 'gpu-gtx-1080-ti', 'ssd-1tb-nvme', 'psu-650-gold', 'cooler-nh-d15', 'case-fractal-north'],
+  },
+  {
     id: 'budget-1080p',
     name: 'Budget 1080p',
     description: 'Best bang-for-buck 1080p build',
@@ -45,7 +57,7 @@ export function PresetBuilds({ onLoad }: PresetBuildsProps) {
   return (
     <section id="builder" className="animate-fade-in">
       <h3 className="text-sm font-medium text-slate-400 uppercase tracking-wider mb-3">Quick-start presets</h3>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3">
         {PRESETS.map((preset) => (
           <button
             key={preset.id}
