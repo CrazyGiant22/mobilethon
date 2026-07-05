@@ -1,4 +1,5 @@
 import type { BuildAnalysis } from '../types'
+import { useCurrency } from '../currency'
 
 interface MobileBuildBarProps {
   analysis: BuildAnalysis
@@ -6,6 +7,7 @@ interface MobileBuildBarProps {
 }
 
 export function MobileBuildBar({ analysis, onScrollToAnalysis }: MobileBuildBarProps) {
+  const { format } = useCurrency()
   const { totalCost, coreCompleteness, errorCount, warningCount } = analysis
 
   return (
@@ -30,7 +32,7 @@ export function MobileBuildBar({ analysis, onScrollToAnalysis }: MobileBuildBarP
           <div className="min-w-0">
             {totalCost > 0 && (
               <p className="text-sm font-mono font-bold text-accent-emerald leading-tight">
-                ${totalCost.toLocaleString()}
+                {format(totalCost)}
               </p>
             )}
             <p className="text-xs leading-tight truncate">

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import type { Build, UseCase } from '../types'
 import { USE_CASE_LABELS } from '../types'
 import { generateBuild } from '../utils/autoBuild'
+import { useCurrency } from '../currency'
 
 interface AutoBuilderProps {
   useCase: UseCase
@@ -14,6 +15,7 @@ const USE_CASES: UseCase[] = ['1080p', '1440p', '4k', 'productivity']
 const PRESET_BUDGETS = [800, 1200, 1800, 2500]
 
 export function AutoBuilder({ useCase, onUseCaseChange, onGenerate, hasExistingBuild }: AutoBuilderProps) {
+  const { format } = useCurrency()
   const [budget, setBudget] = useState(1200)
   const [includeMonitor, setIncludeMonitor] = useState(false)
   const [notes, setNotes] = useState<string[]>([])
@@ -21,7 +23,7 @@ export function AutoBuilder({ useCase, onUseCaseChange, onGenerate, hasExistingB
 
   const handleGenerate = () => {
     if (hasExistingBuild && !window.confirm('Generate a new build? This replaces your current parts.')) return
-    const result = generateBuild(budget, useCase, { includeMonitor })
+    const result = generateBuild(budget, useCase, { includeMonitor, format })
     onGenerate(result.build)
     setNotes(result.notes)
     setSpent(result.spent)
@@ -49,7 +51,7 @@ export function AutoBuilder({ useCase, onUseCaseChange, onGenerate, hasExistingB
         <div>
           <div className="flex items-center justify-between mb-2">
             <label htmlFor="budget" className="text-xs text-slate-400 uppercase tracking-wider">Budget</label>
-            <span className="text-lg font-bold font-mono text-accent-emerald">${budget.toLocaleString()}</span>
+            <span className="text-lg font-bold font-mono text-accent-emerald">{format(budget)}</span>
           </div>
           <input
             id="budget"
@@ -63,7 +65,7 @@ export function AutoBuilder({ useCase, onUseCaseChange, onGenerate, hasExistingB
             style={{ accentColor: '#22d3ee' }}
           />
           <div className="flex flex-wrap gap-2 mt-2">
-            {PRESET_BUDGETS.map((b) => (
+                {PRESET_BUDGETS.map((b) => (
               <button
                 key={b}
                 onClick={() => setBudget(b)}
@@ -73,7 +75,7 @@ export function AutoBuilder({ useCase, onUseCaseChange, onGenerate, hasExistingB
                     : 'bg-surface-700/50 text-slate-400 border-surface-600/40 hover:text-white'
                 }`}
               >
-                ${b.toLocaleString()}
+                {format(b)}
               </button>
             ))}
           </div>
@@ -119,8 +121,8 @@ export function AutoBuilder({ useCase, onUseCaseChange, onGenerate, hasExistingB
         {spent !== null && (
           <div className="rounded-xl border border-surface-600/50 bg-surface-700/30 p-3 text-xs space-y-1.5">
             <p className="text-slate-300">
-              Build total: <span className="font-mono text-accent-emerald">${spent.toLocaleString()}</span>
-              <span className="text-slate-500"> / ${budget.toLocaleString()} budget</span>
+              Build total: <span className="font-mono text-accent-emerald">{format(spent)}</span>
+              <span className="text-slate-500"> / {format(budget)} budget</span>
             </p>
             {notes.map((n, i) => (
               <p key={i} className="text-slate-400">{n}</p>

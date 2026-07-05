@@ -1,12 +1,14 @@
 import type { Build } from '../types'
 import { CATEGORY_ORDER, CATEGORY_LABELS } from '../types'
 import { ComponentVisual } from './ComponentVisual'
+import { useCurrency } from '../currency'
 
 interface BuildVisualizerProps {
   build: Build
 }
 
 export function BuildVisualizer({ build }: BuildVisualizerProps) {
+  const { format } = useCurrency()
   const parts = CATEGORY_ORDER.map((cat) => ({ category: cat, component: build[cat] })).filter((p) => p.component)
 
   if (parts.length === 0) return null
@@ -27,7 +29,7 @@ export function BuildVisualizer({ build }: BuildVisualizerProps) {
             <div className="text-center min-w-0 w-full">
               <p className="text-[10px] text-slate-500 uppercase tracking-wider">{CATEGORY_LABELS[category]}</p>
               <p className="text-xs font-medium text-white truncate mt-0.5">{component!.name}</p>
-              <p className="text-xs text-accent-emerald font-mono mt-0.5">${component!.price}</p>
+              <p className="text-xs text-accent-emerald font-mono mt-0.5">{format(component!.price)}</p>
             </div>
           </div>
         ))}

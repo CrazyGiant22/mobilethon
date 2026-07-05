@@ -1,3 +1,5 @@
+import { useCurrency } from '../currency'
+
 interface HeroProps {
   completeness: number
   coreCompleteness: number
@@ -6,6 +8,7 @@ interface HeroProps {
 }
 
 export function Hero({ completeness, coreCompleteness, totalCost, errorCount }: HeroProps) {
+  const { format } = useCurrency()
   return (
     <section className="relative overflow-hidden border-b border-surface-600/30">
       <div className="absolute inset-0 bg-gradient-to-b from-accent-cyan/5 via-transparent to-transparent pointer-events-none" />
@@ -34,7 +37,7 @@ export function Hero({ completeness, coreCompleteness, totalCost, errorCount }: 
             </div>
             {totalCost > 0 && (
               <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-surface-800 border border-surface-600/50">
-                <span className="text-xl font-bold text-accent-emerald font-mono">${totalCost.toLocaleString()}</span>
+                <span className="text-xl font-bold text-accent-emerald font-mono">{format(totalCost)}</span>
                 <span className="text-xs text-slate-400">estimated</span>
               </div>
             )}

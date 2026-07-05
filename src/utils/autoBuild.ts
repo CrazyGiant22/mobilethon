@@ -39,8 +39,9 @@ function pick(
 export function generateBuild(
   budget: number,
   useCase: UseCase,
-  opts: { includeMonitor?: boolean } = {},
+  opts: { includeMonitor?: boolean; format?: (usd: number) => string } = {},
 ): AutoBuildResult {
+  const fmt = opts.format ?? ((n: number) => `$${n.toLocaleString()}`)
   const notes: string[] = []
   const w = TOWER_WEIGHTS[useCase]
   const build: Build = {}
@@ -176,9 +177,9 @@ export function generateBuild(
 
   const total = towerCost(build)
   if (total > budget) {
-    notes.push(`This is the most affordable compatible build for ${useCase.toUpperCase()} — it runs $${(total - budget).toLocaleString()} over your budget. Raise the budget for more headroom.`)
+    notes.push(`This is the most affordable compatible build for ${useCase.toUpperCase()} — it runs ${fmt(total - budget)} over your budget. Raise the budget for more headroom.`)
   } else if (budget - total >= 150) {
-    notes.push(`$${(budget - total).toLocaleString()} left over — consider a nicer monitor, more storage, or a quieter cooler.`)
+    notes.push(`${fmt(budget - total)} left over — consider a nicer monitor, more storage, or a quieter cooler.`)
   }
 
   return { build, spent: total, notes }

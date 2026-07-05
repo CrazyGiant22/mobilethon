@@ -2,6 +2,7 @@ import { useState } from 'react'
 import type { Build, BuildAnalysis } from '../types'
 import { getShareUrl } from '../utils/buildState'
 import { buildToText, downloadBuild } from '../utils/export'
+import { useCurrency } from '../currency'
 
 interface BuildToolbarProps {
   build: Build
@@ -9,13 +10,14 @@ interface BuildToolbarProps {
 }
 
 export function BuildToolbar({ build, analysis }: BuildToolbarProps) {
+  const { format } = useCurrency()
   const [copied, setCopied] = useState<'link' | 'text' | null>(null)
   const hasParts = Object.values(build).some(Boolean)
 
   if (!hasParts) return null
 
   const copy = async (mode: 'link' | 'text') => {
-    const value = mode === 'link' ? getShareUrl(build) : buildToText(build, analysis)
+    const value = mode === 'link' ? getShareUrl(build) : buildToText(build, analysis, format)
     try {
       await navigator.clipboard.writeText(value)
       setCopied(mode)
@@ -42,7 +44,7 @@ export function BuildToolbar({ build, analysis }: BuildToolbarProps) {
         </svg>
         {copied === 'text' ? 'Copied!' : 'Copy list'}
       </button>
-      <button onClick={() => downloadBuild(build, analysis)} className={btn}>
+      <button onClick={() => downloadBuild(build, analysis, format)} className={btn}>
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
         </svg>

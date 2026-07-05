@@ -1,4 +1,5 @@
 import type { AppView } from '../types'
+import { CurrencySelector } from '../currency'
 
 interface HeaderProps {
   view: AppView
@@ -49,6 +50,7 @@ export function Header({ view, onViewChange }: HeaderProps) {
           >
             Analysis
           </a>
+          <CurrencySelector className="ml-1" />
         </nav>
       </div>
     </header>

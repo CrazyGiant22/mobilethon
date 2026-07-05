@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect } from 'react'
 import type { Build, UseCase } from '../types'
 import { analyzeBuild } from '../utils/analyze'
 import { getSavedBuilds, deserializeBuild, type SavedBuild } from '../utils/storage'
+import { useCurrency } from '../currency'
 
 interface BuildCompareProps {
   currentBuild: Build
@@ -17,6 +18,7 @@ interface Option {
 const CURRENT_ID = '__current__'
 
 export function BuildCompare({ currentBuild, useCase }: BuildCompareProps) {
+  const { format } = useCurrency()
   const [saved, setSaved] = useState<SavedBuild[]>([])
   const [leftId, setLeftId] = useState(CURRENT_ID)
   const [rightId, setRightId] = useState('')
@@ -65,7 +67,7 @@ export function BuildCompare({ currentBuild, useCase }: BuildCompareProps) {
             <span className="text-right sm:text-center truncate">{right.name}</span>
           </div>
           <div className="divide-y divide-surface-600/30">
-            <Row label="Total cost" a={`$${la.totalCost.toLocaleString()}`} b={`$${ra.totalCost.toLocaleString()}`}
+            <Row label="Total cost" a={format(la.totalCost)} b={format(ra.totalCost)}
               win={la.totalCost === ra.totalCost ? 0 : la.totalCost < ra.totalCost ? -1 : 1} />
             <Row label="Tier" a={la.performance.tierLabel} b={ra.performance.tierLabel} win={0} />
             <Row label="Gaming score" a={`${la.performance.gamingScore}`} b={`${ra.performance.gamingScore}`}

@@ -4,6 +4,7 @@ import { CATEGORY_LABELS } from '../types'
 import { components, getComponentsByCategory } from '../data/components'
 import { ComponentVisual } from './ComponentVisual'
 import { BuildCompare } from './BuildCompare'
+import { useCurrency } from '../currency'
 
 interface ComparePanelProps {
   onUseInBuild: (component: PCComponent) => void
@@ -29,6 +30,7 @@ function isBetterSpec(key: string, a: number, b: number): 'a' | 'b' | 'tie' {
 }
 
 export function ComparePanel({ onUseInBuild, currentBuild, useCase }: ComparePanelProps) {
+  const { format } = useCurrency()
   const [mode, setMode] = useState<CompareMode>('components')
   const [category, setCategory] = useState<ComponentCategory>('cpu')
   const [leftId, setLeftId] = useState<string>('')
@@ -171,10 +173,10 @@ export function ComparePanel({ onUseInBuild, currentBuild, useCase }: ComparePan
               <div className="grid grid-cols-[1.4fr_1fr_1fr] gap-2 px-4 sm:px-5 py-2.5 text-sm bg-surface-700/20">
                 <span className="text-slate-400">Price</span>
                 <span className={`text-right sm:text-center font-mono font-bold ${left.price < right.price ? 'text-accent-emerald' : 'text-white'}`}>
-                  ${left.price}
+                  {format(left.price)}
                 </span>
                 <span className={`text-right sm:text-center font-mono font-bold ${right.price < left.price ? 'text-accent-emerald' : 'text-white'}`}>
-                  ${right.price}
+                  {format(right.price)}
                 </span>
               </div>
               {left.performanceScore && right.performanceScore && (
@@ -220,6 +222,7 @@ function CompareSelector({
   onChange: (id: string) => void
   accent: 'cyan' | 'violet'
 }) {
+  const { format } = useCurrency()
   const borderColor = accent === 'cyan' ? 'focus:border-accent-cyan/50' : 'focus:border-accent-violet/50'
   return (
     <div>
@@ -232,7 +235,7 @@ function CompareSelector({
         <option value="">Select component…</option>
         {items.map((c) => (
           <option key={c.id} value={c.id}>
-            {c.name} — ${c.price}
+            {c.name} — {format(c.price)}
           </option>
         ))}
       </select>
@@ -251,6 +254,7 @@ function CompareCard({
   side: 'left' | 'right'
   onUse: () => void
 }) {
+  const { format } = useCurrency()
   const priceDiff = component.price - other.price
   const scoreDiff = (component.performanceScore ?? 0) - (other.performanceScore ?? 0)
   const accent = side === 'left' ? 'text-accent-cyan' : 'text-accent-violet'
@@ -260,7 +264,7 @@ function CompareCard({
       <ComponentVisual component={component} size="lg" className="mb-4" />
       <p className={`text-xs uppercase tracking-wider ${accent}`}>{component.brand}</p>
       <h4 className="text-lg font-semibold text-white mt-1">{component.name}</h4>
-      <p className="text-2xl font-bold font-mono text-white mt-2">${component.price}</p>
+      <p className="text-2xl font-bold font-mono text-white mt-2">{format(component.price)}</p>
       {component.performanceScore && (
         <p className="text-sm text-slate-400 mt-1">
           Score: <span className="font-mono text-white">{component.performanceScore}</span>
@@ -273,7 +277,7 @@ function CompareCard({
       )}
       {priceDiff !== 0 && (
         <p className={`text-xs mt-1 font-mono ${priceDiff < 0 ? 'text-accent-emerald' : 'text-accent-rose'}`}>
-          {priceDiff < 0 ? `$${Math.abs(priceDiff)} cheaper` : `$${priceDiff} more expensive`}
+          {priceDiff < 0 ? `${format(Math.abs(priceDiff))} cheaper` : `${format(priceDiff)} more expensive`}
         </p>
       )}
       <button

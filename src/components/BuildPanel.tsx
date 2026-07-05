@@ -2,6 +2,7 @@ import type { Build, ComponentCategory } from '../types'
 import { CATEGORY_ORDER, CATEGORY_LABELS } from '../types'
 import { ComponentVisual } from './ComponentVisual'
 import { buyUrl } from '../utils/retailers'
+import { useCurrency } from '../currency'
 
 interface BuildPanelProps {
   build: Build
@@ -10,6 +11,7 @@ interface BuildPanelProps {
 }
 
 export function BuildPanel({ build, onSlotClick, onClear }: BuildPanelProps) {
+  const { format, isApprox } = useCurrency()
   const hasParts = CATEGORY_ORDER.some((cat) => build[cat])
 
   return (
@@ -48,7 +50,7 @@ export function BuildPanel({ build, onSlotClick, onClear }: BuildPanelProps) {
                   {part ? (
                     <>
                       <p className="text-sm font-medium text-white truncate">{part.name}</p>
-                      <p className="text-xs text-accent-emerald font-mono">~${part.price}</p>
+                      <p className="text-xs text-accent-emerald font-mono">~{format(part.price)}</p>
                     </>
                   ) : (
                     <p className="text-sm text-slate-500 group-hover:text-slate-300 transition-colors">
@@ -82,7 +84,7 @@ export function BuildPanel({ build, onSlotClick, onClear }: BuildPanelProps) {
       </div>
       {hasParts && (
         <p className="px-5 pb-4 -mt-1 text-[11px] text-slate-500">
-          Prices are MSRP estimates. Tap “Buy” to check live retailer pricing.
+          Prices are MSRP estimates{isApprox ? ', converted from USD at an approximate rate' : ''}. Tap “Buy” to check live retailer pricing.
         </p>
       )}
     </div>

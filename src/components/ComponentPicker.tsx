@@ -4,6 +4,7 @@ import { CATEGORY_LABELS } from '../types'
 import { getComponentsByCategory } from '../data/components'
 import { getCompatBlockReason, getComponentSpecSummary } from '../utils/buildState'
 import { ComponentVisual } from './ComponentVisual'
+import { useCurrency } from '../currency'
 
 interface ComponentPickerProps {
   build: Build
@@ -16,6 +17,7 @@ interface ComponentPickerProps {
 type SortMode = 'price-asc' | 'price-desc' | 'score-desc'
 
 export function ComponentPicker({ build, category, selectedId, onSelect, onClose }: ComponentPickerProps) {
+  const { format } = useCurrency()
   const [search, setSearch] = useState('')
   const [sort, setSort] = useState<SortMode>('score-desc')
   const [hideIncompatible, setHideIncompatible] = useState(false)
@@ -149,7 +151,7 @@ export function ComponentPicker({ build, category, selectedId, onSelect, onClose
                         <p className="text-[11px] text-slate-500 font-mono mt-1 truncate">{specSummary}</p>
                       )}
                     </div>
-                    <span className="text-sm font-mono text-accent-emerald shrink-0">${comp.price}</span>
+                    <span className="text-sm font-mono text-accent-emerald shrink-0">{format(comp.price)}</span>
                   </div>
                   {blockReason && (
                     <p className="text-xs text-accent-rose mt-1.5">{blockReason}</p>
