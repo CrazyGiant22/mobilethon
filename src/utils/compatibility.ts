@@ -192,6 +192,50 @@ export function checkCompatibility(build: Build): CompatibilityIssue[] {
     }
   }
 
+  if (build.gpu && build.monitor) {
+    const pixels = Number(build.monitor.specs.pixels)
+    const refresh = Number(build.monitor.specs.refreshRate)
+    const gpuScore = build.gpu.performanceScore ?? 0
+    if (pixels >= 8_000_000 && gpuScore < 80) {
+      issues.push({
+        id: 'monitor-4k',
+        severity: 'warning',
+        title: 'GPU may struggle at 4K',
+        message: `${build.monitor.name} is 4K. ${build.gpu.name} may need lowered settings or upscaling to hit high FPS.`,
+        category: 'monitor',
+      })
+    } else if (refresh >= 200 && gpuScore < 70) {
+      issues.push({
+        id: 'monitor-highrefresh',
+        severity: 'info',
+        title: 'High refresh needs more GPU',
+        message: `To saturate ${refresh}Hz, pair with a stronger GPU or play esports titles at lower settings.`,
+        category: 'monitor',
+      })
+    } else {
+      issues.push({
+        id: 'monitor-ok',
+        severity: 'success',
+        title: 'Monitor well matched',
+        message: `${build.gpu.name} pairs nicely with this ${build.monitor.specs.resolution} display.`,
+        category: 'monitor',
+      })
+    }
+  }
+
+  if (build.os && String(build.os.specs.type) === 'Windows' && build.ram) {
+    const capacity = Number(build.ram.specs.capacity)
+    if (capacity < 8) {
+      issues.push({
+        id: 'os-ram',
+        severity: 'warning',
+        title: 'RAM below Windows 11 needs',
+        message: 'Windows 11 needs 8GB+ for a smooth experience.',
+        category: 'ram',
+      })
+    }
+  }
+
   const missing = (['cpu', 'gpu', 'motherboard', 'ram', 'storage', 'psu'] as const).filter(
     (cat) => !build[cat],
   )

@@ -18,7 +18,8 @@ import { SavedBuilds } from './components/SavedBuilds'
 import { ComparePanel } from './components/ComparePanel'
 import { BuildVisualizer } from './components/BuildVisualizer'
 import { UseCaseSelector } from './components/UseCaseSelector'
-import { ShareBuildButton } from './components/ShareBuildButton'
+import { BuildToolbar } from './components/BuildToolbar'
+import { FpsEstimator } from './components/FpsEstimator'
 import { MobileBuildBar } from './components/MobileBuildBar'
 
 const EMPTY_BUILD: Build = {}
@@ -113,7 +114,7 @@ export default function App() {
                   hasExistingBuild={Object.values(build).some(Boolean)}
                 />
                 <div className="shrink-0 sm:pt-6">
-                  <ShareBuildButton build={build} />
+                  <BuildToolbar build={build} analysis={analysis} />
                 </div>
               </div>
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
@@ -131,12 +132,13 @@ export default function App() {
                   />
                   <SavedBuilds currentBuild={build} onLoad={loadPreset} />
                 </div>
-                <div className="xl:col-span-3">
+                <div className="xl:col-span-3 space-y-4">
                   <AnalysisPanel
                     analysis={analysis}
                     build={build}
                     onFixCategory={setActiveCategory}
                   />
+                  <FpsEstimator build={build} useCase={useCase} />
                 </div>
               </div>
             </>

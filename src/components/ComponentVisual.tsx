@@ -12,6 +12,11 @@ export const BRAND_COLORS: Record<string, { primary: string; secondary: string; 
   Noctua: { primary: '#8B6914', secondary: '#4a3520', glow: 'rgba(139,105,20,0.3)' },
   'G.Skill': { primary: '#FF0040', secondary: '#1a1a1a', glow: 'rgba(255,0,64,0.3)' },
   NZXT: { primary: '#7B2D8E', secondary: '#1a1a1a', glow: 'rgba(123,45,142,0.3)' },
+  Dell: { primary: '#007DB8', secondary: '#1a1a1a', glow: 'rgba(0,125,184,0.3)' },
+  LG: { primary: '#A50034', secondary: '#1a1a1a', glow: 'rgba(165,0,52,0.3)' },
+  'Arctic': { primary: '#3aa6ff', secondary: '#1a2332', glow: 'rgba(58,166,255,0.3)' },
+  Microsoft: { primary: '#0078D4', secondary: '#1a1a1a', glow: 'rgba(0,120,212,0.3)' },
+  Canonical: { primary: '#E95420', secondary: '#1a1a1a', glow: 'rgba(233,84,32,0.3)' },
   default: { primary: '#22d3ee', secondary: '#1a2332', glow: 'rgba(34,211,238,0.3)' },
 }
 
@@ -79,6 +84,9 @@ function CategoryArt({
     case 'psu': return <PsuArt primary={primary} />
     case 'cooler': return <CoolerArt primary={primary} isAio={componentId?.includes('aio') ?? false} />
     case 'case': return <CaseArt primary={primary} />
+    case 'monitor': return <MonitorArt primary={primary} secondary={secondary} />
+    case 'fans': return <FansArt primary={primary} />
+    case 'os': return <OsArt primary={primary} componentId={componentId} />
     default: return null
   }
 }
@@ -219,6 +227,65 @@ function CaseArt({ primary }: { primary: string }) {
       <circle cx="38" cy="58" r="8" fill="none" stroke={primary} strokeWidth="1" opacity="0.5" />
       <circle cx="62" cy="58" r="8" fill="none" stroke={primary} strokeWidth="1" opacity="0.5" />
       <rect x="42" y="75" width="16" height="4" rx="1" fill={primary} opacity="0.3" />
+    </g>
+  )
+}
+
+function MonitorArt({ primary, secondary }: { primary: string; secondary: string }) {
+  return (
+    <g>
+      <rect x="12" y="20" width="76" height="48" rx="3" fill={secondary} stroke={primary} strokeWidth="1.5" />
+      <rect x="17" y="25" width="66" height="38" rx="1" fill="#1a2332" stroke={primary} strokeWidth="0.8" opacity="0.7" />
+      <rect x="22" y="30" width="30" height="4" rx="1" fill={primary} opacity="0.5" />
+      <rect x="22" y="38" width="45" height="3" rx="1" fill={primary} opacity="0.3" />
+      <rect x="22" y="45" width="38" height="3" rx="1" fill={primary} opacity="0.25" />
+      <rect x="44" y="68" width="12" height="10" fill={primary} opacity="0.4" />
+      <rect x="34" y="78" width="32" height="4" rx="1" fill={primary} opacity="0.6" />
+    </g>
+  )
+}
+
+function FansArt({ primary }: { primary: string }) {
+  return (
+    <g>
+      <rect x="20" y="20" width="60" height="60" rx="4" fill="#1a2332" stroke={primary} strokeWidth="1.5" />
+      <circle cx="50" cy="50" r="24" fill="none" stroke={primary} strokeWidth="1" opacity="0.5" />
+      <circle cx="50" cy="50" r="6" fill={primary} opacity="0.7" />
+      {Array.from({ length: 7 }).map((_, i) => {
+        const angle = (i / 7) * Math.PI * 2
+        return (
+          <path
+            key={i}
+            d={`M50 50 L${50 + Math.cos(angle) * 22} ${50 + Math.sin(angle) * 22} A22 22 0 0 1 ${50 + Math.cos(angle + 0.7) * 22} ${50 + Math.sin(angle + 0.7) * 22} Z`}
+            fill={primary}
+            opacity="0.2"
+          />
+        )
+      })}
+    </g>
+  )
+}
+
+function OsArt({ primary, componentId }: { primary: string; componentId?: string }) {
+  const isLinux = componentId?.includes('linux')
+  return (
+    <g>
+      <rect x="20" y="24" width="60" height="52" rx="4" fill="#1a2332" stroke={primary} strokeWidth="1.5" />
+      {isLinux ? (
+        <>
+          <circle cx="50" cy="46" r="14" fill={primary} opacity="0.3" />
+          <circle cx="45" cy="43" r="2.5" fill="#fff" />
+          <circle cx="55" cy="43" r="2.5" fill="#fff" />
+          <path d="M44 52 Q50 58 56 52" fill="none" stroke="#fff" strokeWidth="1.5" />
+        </>
+      ) : (
+        <>
+          <rect x="34" y="34" width="14" height="14" fill={primary} opacity="0.7" />
+          <rect x="52" y="34" width="14" height="14" fill={primary} opacity="0.55" />
+          <rect x="34" y="52" width="14" height="14" fill={primary} opacity="0.55" />
+          <rect x="52" y="52" width="14" height="14" fill={primary} opacity="0.4" />
+        </>
+      )}
     </g>
   )
 }

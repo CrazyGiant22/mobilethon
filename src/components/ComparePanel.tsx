@@ -8,7 +8,7 @@ interface ComparePanelProps {
   onUseInBuild: (component: PCComponent) => void
 }
 
-const COMPARE_CATEGORIES: ComponentCategory[] = ['cpu', 'gpu', 'motherboard', 'ram', 'storage', 'psu', 'cooler', 'case']
+const COMPARE_CATEGORIES: ComponentCategory[] = ['cpu', 'gpu', 'monitor', 'motherboard', 'ram', 'storage', 'psu', 'cooler', 'case']
 
 function formatSpecValue(value: string | number | boolean | string[]): string {
   if (Array.isArray(value)) return value.join(', ')

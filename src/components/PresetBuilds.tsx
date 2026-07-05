@@ -11,37 +11,37 @@ const PRESETS = [
     id: 'legacy-9th-gen',
     name: '9th Gen Classic',
     description: 'i5-9400F + GTX 1060 — proven 1080p combo',
-    parts: ['cpu-i5-9400f', 'mb-b365m-pro-vdh', 'ram-16-ddr4', 'gpu-gtx-1060-6gb', 'ssd-500gb-nvme', 'psu-550-bronze', 'cooler-hyper212', 'case-corsair-4000d'],
+    parts: ['cpu-i5-9400f', 'mb-b365m-pro-vdh', 'ram-16-ddr4', 'gpu-gtx-1060-6gb', 'ssd-500gb-nvme', 'psu-550-bronze', 'cooler-hyper212', 'case-corsair-4000d', 'mon-1080p-165', 'fans-arctic-p12-3', 'os-win11-home'],
   },
   {
     id: '9th-gen-high',
     name: '9th Gen + 1080 Ti',
     description: 'i7-9700K paired with GTX 1080 Ti',
-    parts: ['cpu-i7-9700k', 'mb-z390-aorus', 'ram-32-ddr4', 'gpu-gtx-1080-ti', 'ssd-1tb-nvme', 'psu-650-gold', 'cooler-nh-d15', 'case-fractal-north'],
+    parts: ['cpu-i7-9700k', 'mb-z390-aorus', 'ram-32-ddr4', 'gpu-gtx-1080-ti', 'ssd-1tb-nvme', 'psu-650-gold', 'cooler-nh-d15', 'case-fractal-north', 'mon-1440p-165', 'fans-arctic-p14-2', 'os-win11-home'],
   },
   {
     id: 'budget-1080p',
     name: 'Budget 1080p',
     description: 'Best bang-for-buck 1080p build',
-    parts: ['cpu-i5-13400f', 'mb-b760', 'ram-16-budget', 'gpu-rtx-3050', 'ssd-500gb-nvme', 'psu-550-bronze', 'cooler-peerless', 'case-montech-xr'],
+    parts: ['cpu-i5-13400f', 'mb-b760', 'ram-16-budget', 'gpu-rtx-3050', 'ssd-500gb-nvme', 'psu-550-bronze', 'cooler-peerless', 'case-montech-xr', 'mon-1080p-165', 'fans-arctic-p12-3', 'os-ubuntu'],
   },
   {
     id: '1080p-gaming',
     name: '1080p Gaming',
     description: 'Solid 1080p high-refresh gaming',
-    parts: ['cpu-ryzen-5-7600', 'mb-b650', 'ram-16-ddr5', 'gpu-rtx-4060', 'ssd-1tb-nvme', 'psu-650-gold', 'cooler-hyper212', 'case-nzxt-h5'],
+    parts: ['cpu-ryzen-5-7600', 'mb-b650', 'ram-16-ddr5', 'gpu-rtx-4060', 'ssd-1tb-nvme', 'psu-650-gold', 'cooler-hyper212', 'case-nzxt-h5', 'mon-1080p-240', 'fans-arctic-p12-3', 'os-win11-home'],
   },
   {
     id: '1440p-ultra',
     name: '1440p Ultra',
     description: 'Max settings at 1440p',
-    parts: ['cpu-ryzen-7-7800x3d', 'mb-b650', 'ram-32-ddr5', 'gpu-rtx-4070-super', 'ssd-2tb-nvme', 'psu-750-gold', 'cooler-aio-240', 'case-fractal-north'],
+    parts: ['cpu-ryzen-7-7800x3d', 'mb-b650', 'ram-32-ddr5', 'gpu-rtx-4070-super', 'ssd-2tb-nvme', 'psu-750-gold', 'cooler-aio-240', 'case-fractal-north', 'mon-1440p-165', 'fans-ll120-3', 'os-win11-home'],
   },
   {
     id: '4k-enthusiast',
     name: '4K Enthusiast',
     description: 'No-compromise 4K gaming',
-    parts: ['cpu-i7-14700k', 'mb-z790', 'ram-32-ddr5', 'gpu-rtx-4080-super', 'ssd-2tb-nvme', 'psu-850-platinum', 'cooler-aio-360', 'case-lian-li-o11'],
+    parts: ['cpu-i7-14700k', 'mb-z790', 'ram-32-ddr5', 'gpu-rtx-4080-super', 'ssd-2tb-nvme', 'psu-850-platinum', 'cooler-aio-360', 'case-lian-li-o11', 'mon-4k-144', 'fans-noctua-a12-2', 'os-win11-pro'],
   },
 ] as const
 

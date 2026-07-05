@@ -4,15 +4,18 @@ A data-driven web app for PC builders and hardware enthusiasts who want to optim
 
 ## Features
 
-- **Component picker** — Curated database of CPUs, GPUs, motherboards, RAM, storage, PSUs, coolers, and cases
-- **Compatibility checks** — Socket matching, RAM type, cooler TDP, GPU/case clearance, radiator fit
-- **Bottleneck analysis** — CPU/GPU balance scoring with utilization estimates and plain-language verdicts
-- **Power estimation** — System draw calculation with PSU headroom recommendations
+- **Component picker** — Curated database of CPUs, GPUs, motherboards, RAM, storage, PSUs, coolers, cases, monitors, case fans, and operating systems
+- **Compatibility checks** — Socket matching, RAM type/capacity, cooler TDP, GPU/case clearance, radiator fit, form factor, and GPU/monitor pairing
+- **Bottleneck analysis** — CPU/GPU balance scoring that adapts to your target resolution (1080p/1440p/4K/productivity)
+- **FPS estimator** — Rough FPS bands for esports, competitive, and AAA titles at your resolution
+- **Power estimation** — System draw calculation (incl. fans) with PSU headroom recommendations
 - **Performance profiling** — Gaming and productivity scores with tier classification
-- **Smart recommendations** — Prioritized upgrade suggestions based on your actual build
+- **Smart recommendations** — Prioritized, clickable upgrade suggestions based on your actual build
 - **Saved builds** — Save and load up to 20 builds to browser local storage
-- **Component comparison** — Side-by-side spec, score, and value comparison for CPUs, GPUs, RAM, and more
-- **Quick-start presets** — 1080p, 1440p, and 4K enthusiast templates to explore instantly
+- **Shareable links & export** — Copy a share URL, copy the parts list, or export a build summary as text
+- **Component comparison** — Side-by-side spec, score, and value comparison across every category
+- **Quick-start presets** — Complete 1080p, 1440p, and 4K templates including monitor, fans, and OS
+- **Mobile-friendly** — Bottom-sheet picker, sticky summary bar, and touch-sized controls
 
 ## Getting started
 

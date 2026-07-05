@@ -170,6 +170,12 @@ export function getComponentSpecSummary(component: PCComponent): string {
         : `Air · ${specs.tdpRating}W TDP · ${specs.height}mm`
     case 'case':
       return `${specs.formFactor} · GPU ≤${specs.maxGpuLength}mm · Rad ${specs.radiatorSupport}mm`
+    case 'monitor':
+      return `${specs.size}" · ${specs.resolution} · ${specs.refreshRate}Hz ${specs.panel}`
+    case 'fans':
+      return `${specs.count}× ${specs.size}mm · ${specs.rpm} RPM${specs.rgb ? ' · RGB' : ''}`
+    case 'os':
+      return `${specs.type} ${specs.edition} · ${specs.license}`
     default:
       return ''
   }

@@ -18,6 +18,9 @@ export type ComponentCategory =
   | 'psu'
   | 'cooler'
   | 'case'
+  | 'monitor'
+  | 'fans'
+  | 'os'
 
 export interface PCComponent {
   id: string
@@ -40,6 +43,9 @@ export interface Build {
   psu?: PCComponent
   cooler?: PCComponent
   case?: PCComponent
+  monitor?: PCComponent
+  fans?: PCComponent
+  os?: PCComponent
 }
 
 export type IssueSeverity = 'error' | 'warning' | 'info' | 'success'
@@ -105,6 +111,9 @@ export const CATEGORY_LABELS: Record<ComponentCategory, string> = {
   psu: 'Power Supply',
   cooler: 'CPU Cooler',
   case: 'Case',
+  monitor: 'Monitor',
+  fans: 'Case Fans',
+  os: 'Operating System',
 }
 
 export const CATEGORY_ORDER: ComponentCategory[] = [
@@ -116,4 +125,18 @@ export const CATEGORY_ORDER: ComponentCategory[] = [
   'cooler',
   'psu',
   'case',
+  'monitor',
+  'fans',
+  'os',
 ]
+
+/** Categories required for a functional PC (drive completeness scoring). */
+export const CORE_CATEGORIES: ComponentCategory[] = ['cpu', 'gpu', 'motherboard', 'ram', 'storage', 'psu']
+
+/** Physical build parts that go inside the case. */
+export const BUILD_CATEGORIES: ComponentCategory[] = [
+  'cpu', 'motherboard', 'ram', 'gpu', 'storage', 'cooler', 'psu', 'case',
+]
+
+/** Peripherals / software that complete a setup but aren't installed inside the case. */
+export const ACCESSORY_CATEGORIES: ComponentCategory[] = ['monitor', 'fans', 'os']
