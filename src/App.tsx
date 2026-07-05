@@ -156,7 +156,7 @@ export default function App() {
               </div>
             </>
           ) : (
-            <ComparePanel onUseInBuild={useInBuild} />
+            <ComparePanel onUseInBuild={useInBuild} currentBuild={build} useCase={useCase} />
           )}
         </div>
       </main>

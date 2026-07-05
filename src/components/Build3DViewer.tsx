@@ -8,11 +8,24 @@ interface Build3DViewerProps {
   build: Build
 }
 
+const RGB_SWATCHES: { label: string; value: string }[] = [
+  { label: 'Rainbow', value: 'rainbow' },
+  { label: 'Cyan', value: '#22d3ee' },
+  { label: 'Violet', value: '#a78bfa' },
+  { label: 'Green', value: '#34d399' },
+  { label: 'Red', value: '#fb3b5c' },
+  { label: 'Amber', value: '#fbbf24' },
+  { label: 'Blue', value: '#3b82f6' },
+  { label: 'Pink', value: '#ec4899' },
+]
+
 export function Build3DViewer({ build }: Build3DViewerProps) {
   const [active, setActive] = useState(false)
   const [powered, setPowered] = useState(false)
+  const [rgbColor, setRgbColor] = useState('rainbow')
   const partCount = BUILD_CATEGORIES.filter((c) => build[c]).length
   const canRender = Boolean(build.motherboard || build.case || build.cpu || build.gpu)
+  const hasRgb = Boolean(build.fans?.specs.rgb)
 
   return (
     <div className="tech-card rounded-2xl bg-surface-800 border border-surface-600/50 overflow-hidden">
@@ -55,14 +68,49 @@ export function Build3DViewer({ build }: Build3DViewerProps) {
       </div>
 
       {active ? (
-        <div className="relative h-[340px] sm:h-[420px] w-full">
-          <Suspense fallback={<Loader />}>
-            <Build3DScene build={build} powered={powered} />
-          </Suspense>
-          <p className="absolute bottom-2 left-0 right-0 text-center text-[11px] text-slate-500 pointer-events-none">
-            Drag to rotate · scroll to zoom{powered ? '' : ' · press Power on to boot'}
-          </p>
-        </div>
+        <>
+          <div className="relative h-[340px] sm:h-[420px] w-full">
+            <Suspense fallback={<Loader />}>
+              <Build3DScene build={build} powered={powered} rgbColor={rgbColor} />
+            </Suspense>
+            <p className="absolute bottom-2 left-0 right-0 text-center text-[11px] text-slate-500 pointer-events-none">
+              Drag to rotate · scroll to zoom{powered ? '' : ' · press Power on to boot'}
+            </p>
+          </div>
+          <div className="px-5 py-3 border-t border-surface-600/50 flex items-center gap-3 flex-wrap">
+            <span className="text-xs text-slate-400 uppercase tracking-wider">RGB</span>
+            <div className="flex items-center gap-1.5 flex-wrap">
+              {RGB_SWATCHES.map((s) => (
+                <button
+                  key={s.value}
+                  onClick={() => setRgbColor(s.value)}
+                  title={s.label}
+                  aria-label={s.label}
+                  className={`w-6 h-6 rounded-full border-2 transition-transform ${
+                    rgbColor === s.value ? 'border-white scale-110' : 'border-surface-600'
+                  }`}
+                  style={{
+                    background:
+                      s.value === 'rainbow'
+                        ? 'conic-gradient(from 0deg, #ff0000, #ffa500, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000)'
+                        : s.value,
+                  }}
+                />
+              ))}
+              <label className="w-6 h-6 rounded-full border-2 border-surface-600 overflow-hidden relative cursor-pointer" title="Custom color">
+                <span className="absolute inset-0 flex items-center justify-center text-[10px] text-slate-300 pointer-events-none">+</span>
+                <input
+                  type="color"
+                  onChange={(e) => setRgbColor(e.target.value)}
+                  className="absolute inset-0 opacity-0 cursor-pointer"
+                />
+              </label>
+            </div>
+            {!hasRgb && (
+              <span className="text-[11px] text-slate-500">Add RGB fans to light up the fans too</span>
+            )}
+          </div>
+        </>
       ) : (
         <div className="p-6 flex flex-col items-center justify-center text-center gap-4">
           <div className="w-16 h-16 rounded-2xl bg-surface-700 flex items-center justify-center">

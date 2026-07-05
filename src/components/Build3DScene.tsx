@@ -7,6 +7,7 @@ import type { Build } from '../types'
 interface Build3DSceneProps {
   build: Build
   powered: boolean
+  rgbColor: string
 }
 
 const PCB_COLOR = '#0c2a22'
@@ -19,6 +20,7 @@ function Fan({
   speed = 6,
   facing = 'x',
   powered = true,
+  rgbColor = 'rainbow',
 }: {
   position: [number, number, number]
   radius?: number
@@ -26,6 +28,7 @@ function Fan({
   speed?: number
   facing?: 'x' | 'z' | 'y'
   powered?: boolean
+  rgbColor?: string
 }) {
   const group = useRef<THREE.Group>(null)
   const mat = useRef<THREE.MeshStandardMaterial>(null)
@@ -34,9 +37,14 @@ function Fan({
     if (group.current && powered) group.current.rotation.z += delta * speed
     if (mat.current) {
       if (powered && rgb) {
-        const hue = (state.clock.elapsedTime * 0.15) % 1
-        mat.current.color.setHSL(hue, 0.9, 0.55)
-        mat.current.emissive.setHSL(hue, 0.9, 0.35)
+        if (rgbColor === 'rainbow') {
+          const hue = (state.clock.elapsedTime * 0.15) % 1
+          mat.current.color.setHSL(hue, 0.9, 0.55)
+          mat.current.emissive.setHSL(hue, 0.9, 0.35)
+        } else {
+          mat.current.color.set(rgbColor)
+          mat.current.emissive.set(rgbColor)
+        }
         mat.current.emissiveIntensity = 0.8
       } else if (powered) {
         mat.current.emissiveIntensity = 0.25
@@ -93,10 +101,11 @@ function PowerLed({ powered }: { powered: boolean }) {
   )
 }
 
-function PcCase({ build, powered }: { build: Build; powered: boolean }) {
+function PcCase({ build, powered, rgbColor }: { build: Build; powered: boolean; rgbColor: string }) {
   const caseColor = '#141c2b'
   const rgb = Boolean(build.fans?.specs.rgb)
-  const accent = powered && rgb ? '#22d3ee' : '#3a4658'
+  const solid = rgbColor === 'rainbow' ? '#22d3ee' : rgbColor
+  const accent = powered && rgb ? solid : '#3a4658'
   const hx = 1.5
   const hy = 3.4
   const hz = 3.4
@@ -141,6 +150,7 @@ function PcCase({ build, powered }: { build: Build; powered: boolean }) {
           facing="z"
           speed={5}
           powered={powered}
+          rgbColor={rgbColor}
         />
       ))}
     </group>
@@ -189,30 +199,29 @@ function AirCooler({ powered }: { powered: boolean }) {
   )
 }
 
-function AioCooler({ rgb, powered }: { rgb: boolean; powered: boolean }) {
+function AioCooler({ rgb, powered, rgbColor }: { rgb: boolean; powered: boolean; rgbColor: string }) {
+  const solid = rgbColor === 'rainbow' ? '#22d3ee' : rgbColor
   return (
     <group>
       <mesh position={[-1.05, 1.3, 0.4]}>
         <boxGeometry args={[0.3, 0.7, 0.7]} />
         <meshStandardMaterial color="#20272f" metalness={0.7} roughness={0.3} />
       </mesh>
-      {rgb && (
-        <mesh position={[-0.89, 1.3, 0.4]} rotation={[0, Math.PI / 2, 0]}>
-          <ringGeometry args={[0.18, 0.28, 24]} />
-          <meshStandardMaterial
-            color="#22d3ee"
-            emissive="#22d3ee"
-            emissiveIntensity={powered ? 1 : 0}
-            side={THREE.DoubleSide}
-          />
-        </mesh>
-      )}
+      <mesh position={[-0.89, 1.3, 0.4]} rotation={[0, Math.PI / 2, 0]}>
+        <ringGeometry args={[0.18, 0.28, 24]} />
+        <meshStandardMaterial
+          color={solid}
+          emissive={solid}
+          emissiveIntensity={powered ? 1 : 0}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
       <mesh position={[0, 3.15, 0]}>
         <boxGeometry args={[2.6, 0.35, 1.0]} />
         <meshStandardMaterial color="#3a4658" {...METAL} />
       </mesh>
-      <Fan position={[-0.7, 2.9, 0]} radius={0.45} facing="y" rgb={rgb} speed={6} powered={powered} />
-      <Fan position={[0.7, 2.9, 0]} radius={0.45} facing="y" rgb={rgb} speed={6} powered={powered} />
+      <Fan position={[-0.7, 2.9, 0]} radius={0.45} facing="y" rgb={rgb} speed={6} powered={powered} rgbColor={rgbColor} />
+      <Fan position={[0.7, 2.9, 0]} radius={0.45} facing="y" rgb={rgb} speed={6} powered={powered} rgbColor={rgbColor} />
     </group>
   )
 }
@@ -338,7 +347,7 @@ function Monitor({ sizeInches, powered }: { sizeInches: number; powered: boolean
   )
 }
 
-function Scene({ build, powered }: { build: Build; powered: boolean }) {
+function Scene({ build, powered, rgbColor }: { build: Build; powered: boolean; rgbColor: string }) {
   const coolerType = build.cooler ? String(build.cooler.specs.type) : null
   const ramCount = build.ram ? Number(build.ram.specs.modules) || 2 : 0
   const gpuLen = build.gpu ? Math.min(2.9, 2 + Number(build.gpu.specs.length) / 260) : 2.4
@@ -348,11 +357,11 @@ function Scene({ build, powered }: { build: Build; powered: boolean }) {
 
   return (
     <group rotation={[0, -0.5, 0]}>
-      <PcCase build={build} powered={powered} />
+      <PcCase build={build} powered={powered} rgbColor={rgbColor} />
       {build.motherboard && <Motherboard />}
       {build.cpu && <Cpu />}
       {build.cooler && coolerType === 'air' && <AirCooler powered={powered} />}
-      {build.cooler && coolerType === 'aio' && <AioCooler rgb={rgb} powered={powered} />}
+      {build.cooler && coolerType === 'aio' && <AioCooler rgb={rgb} powered={powered} rgbColor={rgbColor} />}
       {build.ram && <RamSticks count={ramCount} />}
       {build.gpu && <Gpu accent={gpuAccent} lengthUnits={gpuLen} powered={powered} />}
       {build.psu && <Psu />}
@@ -362,7 +371,7 @@ function Scene({ build, powered }: { build: Build; powered: boolean }) {
   )
 }
 
-export default function Build3DScene({ build, powered }: Build3DSceneProps) {
+export default function Build3DScene({ build, powered, rgbColor }: Build3DSceneProps) {
   return (
     <Canvas camera={{ position: [11, 4, 11], fov: 42 }} dpr={[1, 2]} shadows>
       <color attach="background" args={['#0a0e17']} />
@@ -381,7 +390,7 @@ export default function Build3DScene({ build, powered }: Build3DSceneProps) {
       <pointLight position={[-3, -3, -3]} intensity={25} color="#fb7185" distance={14} />
       <spotLight position={[-2, 4, -8]} angle={0.8} penumbra={1} intensity={90} color="#22d3ee" />
 
-      <Scene build={build} powered={powered} />
+      <Scene build={build} powered={powered} rgbColor={rgbColor} />
       <ContactShadows position={[0, -3.6, 0]} opacity={0.6} scale={20} blur={2.5} far={5} />
       <OrbitControls
         enablePan={false}

@@ -1,12 +1,17 @@
 import { useState, useMemo } from 'react'
-import type { ComponentCategory, PCComponent } from '../types'
+import type { Build, ComponentCategory, PCComponent, UseCase } from '../types'
 import { CATEGORY_LABELS } from '../types'
 import { components, getComponentsByCategory } from '../data/components'
 import { ComponentVisual } from './ComponentVisual'
+import { BuildCompare } from './BuildCompare'
 
 interface ComparePanelProps {
   onUseInBuild: (component: PCComponent) => void
+  currentBuild: Build
+  useCase: UseCase
 }
+
+type CompareMode = 'components' | 'builds'
 
 const COMPARE_CATEGORIES: ComponentCategory[] = ['cpu', 'gpu', 'monitor', 'motherboard', 'ram', 'storage', 'psu', 'cooler', 'case']
 
@@ -23,7 +28,8 @@ function isBetterSpec(key: string, a: number, b: number): 'a' | 'b' | 'tie' {
   return a > b ? 'a' : 'b'
 }
 
-export function ComparePanel({ onUseInBuild }: ComparePanelProps) {
+export function ComparePanel({ onUseInBuild, currentBuild, useCase }: ComparePanelProps) {
+  const [mode, setMode] = useState<CompareMode>('components')
   const [category, setCategory] = useState<ComponentCategory>('cpu')
   const [leftId, setLeftId] = useState<string>('')
   const [rightId, setRightId] = useState<string>('')
@@ -48,11 +54,36 @@ export function ComparePanel({ onUseInBuild }: ComparePanelProps) {
 
   return (
     <section id="compare" className="animate-fade-in space-y-6">
-      <div>
-        <h3 className="text-xl sm:text-2xl font-bold text-white">Component Comparison</h3>
-        <p className="text-sm sm:text-base text-slate-400 mt-1">Pick two parts side-by-side to see specs, scores, and value differences.</p>
+      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
+        <div>
+          <h3 className="text-xl sm:text-2xl font-bold text-white">
+            {mode === 'components' ? 'Component Comparison' : 'Build Comparison'}
+          </h3>
+          <p className="text-sm sm:text-base text-slate-400 mt-1">
+            {mode === 'components'
+              ? 'Pick two parts side-by-side to see specs, scores, and value differences.'
+              : 'Compare two complete builds on cost, performance, thermals, and value.'}
+          </p>
+        </div>
+        <div className="flex gap-1 p-1 rounded-xl bg-surface-800 border border-surface-600/50 self-start">
+          {(['components', 'builds'] as CompareMode[]).map((m) => (
+            <button
+              key={m}
+              onClick={() => setMode(m)}
+              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                mode === m ? 'bg-accent-cyan/15 text-accent-cyan' : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              {m === 'components' ? 'Components' : 'Builds'}
+            </button>
+          ))}
+        </div>
       </div>
 
+      {mode === 'builds' ? (
+        <BuildCompare currentBuild={currentBuild} useCase={useCase} />
+      ) : (
+      <>
       <div className="-mx-4 px-4 sm:mx-0 sm:px-0 overflow-x-auto">
         <div className="flex gap-2 w-max sm:w-auto sm:flex-wrap">
           {COMPARE_CATEGORIES.map((cat) => (
@@ -169,6 +200,8 @@ export function ComparePanel({ onUseInBuild }: ComparePanelProps) {
         <div className="rounded-2xl bg-surface-800 border border-surface-600/50 p-12 text-center">
           <p className="text-slate-400">Select two {CATEGORY_LABELS[category].toLowerCase()} components above to compare.</p>
         </div>
+      )}
+      </>
       )}
     </section>
   )
