@@ -466,6 +466,14 @@ export const components: PCComponent[] = [
     price: 75,
     specs: { socket: 'LGA1151', chipset: 'B365', formFactor: 'mATX', ddr: 'DDR4', maxRam: 64, m2Slots: 1, pcie: 3 },
   },
+  {
+    id: 'mb-b365m-pro-vdh',
+    name: 'MSI B365M PRO-VDH',
+    category: 'motherboard',
+    brand: 'MSI',
+    price: 72,
+    specs: { socket: 'LGA1151', chipset: 'B365', formFactor: 'mATX', ddr: 'DDR4', maxRam: 64, m2Slots: 1, pcie: 3 },
+  },
 
   // RAM
   {

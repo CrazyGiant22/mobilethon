@@ -2,12 +2,13 @@ import { useState, useMemo } from 'react'
 import type { ComponentCategory, PCComponent } from '../types'
 import { CATEGORY_LABELS } from '../types'
 import { components, getComponentsByCategory } from '../data/components'
+import { ComponentVisual } from './ComponentVisual'
 
 interface ComparePanelProps {
   onUseInBuild: (component: PCComponent) => void
 }
 
-const COMPARE_CATEGORIES: ComponentCategory[] = ['cpu', 'gpu', 'ram', 'storage', 'psu', 'cooler']
+const COMPARE_CATEGORIES: ComponentCategory[] = ['cpu', 'gpu', 'motherboard', 'ram', 'storage', 'psu', 'cooler']
 
 function formatSpecValue(value: string | number | boolean | string[]): string {
   if (Array.isArray(value)) return value.join(', ')
@@ -220,7 +221,8 @@ function CompareCard({
   const accent = side === 'left' ? 'text-accent-cyan' : 'text-accent-violet'
 
   return (
-    <div className="p-5">
+    <div className="p-5 flex flex-col items-center sm:items-start">
+      <ComponentVisual component={component} size="lg" className="mb-4" />
       <p className={`text-xs uppercase tracking-wider ${accent}`}>{component.brand}</p>
       <h4 className="text-lg font-semibold text-white mt-1">{component.name}</h4>
       <p className="text-2xl font-bold font-mono text-white mt-2">${component.price}</p>

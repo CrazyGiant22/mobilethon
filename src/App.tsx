@@ -10,6 +10,7 @@ import { ComponentPicker } from './components/ComponentPicker'
 import { PresetBuilds } from './components/PresetBuilds'
 import { SavedBuilds } from './components/SavedBuilds'
 import { ComparePanel } from './components/ComparePanel'
+import { BuildVisualizer } from './components/BuildVisualizer'
 
 const EMPTY_BUILD: Build = {}
 
@@ -57,6 +58,9 @@ export default function App() {
           {view === 'builder' ? (
             <>
               <PresetBuilds onLoad={loadPreset} />
+              <div className="mt-6">
+                <BuildVisualizer build={build} />
+              </div>
               <div className="mt-8 grid grid-cols-1 xl:grid-cols-5 gap-6">
                 <div className="xl:col-span-2 space-y-4">
                   <BuildPanel
