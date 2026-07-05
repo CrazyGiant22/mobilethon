@@ -24,6 +24,7 @@ import { FpsEstimator } from './components/FpsEstimator'
 import { Build3DViewer } from './components/Build3DViewer'
 import { MobileBuildBar } from './components/MobileBuildBar'
 import { TechBackground } from './components/TechBackground'
+import { Footer } from './components/Footer'
 
 const EMPTY_BUILD: Build = {}
 
@@ -160,6 +161,7 @@ export default function App() {
           )}
         </div>
       </main>
+      <Footer />
       {view === 'builder' && (
         <MobileBuildBar analysis={analysis} onScrollToAnalysis={scrollToAnalysis} />
       )}
